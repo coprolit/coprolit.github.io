@@ -44,7 +44,7 @@
     <script src="https://smtpjs.com/v3/smtp.js"></script>
 </svelte:head>
 
-<h1>Bolt Action side mission generator</h1>
+<h1>Bolt Action side missions generator</h1>
 
 <form on:submit|preventDefault={generate}>
     <label for="email1">Player #1</label>
