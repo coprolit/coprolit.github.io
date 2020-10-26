@@ -39,7 +39,7 @@
 
 <svelte:head>
     <script src="https://smtpjs.com/v3/smtp.js"></script>
-    <base href="/">
+    <base href="/missions">
 </svelte:head>
 
 <h1>Bolt Action side missions generator</h1>
