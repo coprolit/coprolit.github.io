@@ -14,6 +14,7 @@
             .filter(el => el.href.includes('mission'))
             .map(el => el.href);
         const randomUrl = urls[getRandomInt(urls.length)];
+        
         // Assign mission to player #1:
         Email.send({
             SecureToken : "0b6eed09-ca2b-41ed-9283-2d33686b5dd2",
@@ -24,6 +25,7 @@
         }).then(
             message => console.log(message)
         );
+        
         // Assign mission to player #1:
         Email.send({
             SecureToken : "0b6eed09-ca2b-41ed-9283-2d33686b5dd2",
