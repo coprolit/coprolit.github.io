@@ -96,7 +96,7 @@ function baseConfig(config, ctx) {
 
     function transform(contents) {
         const scriptTag = typeof config.scriptTag != 'undefined' ?
-            config.scriptTag : '<script type="module" defer src="/build/main.js"></script>'
+            config.scriptTag : '<script type="module" defer src="build/main.js"></script>'
         const bundleTag = '<script defer src="/build/bundle.js"></script>'
         return contents.toString().replace('__SCRIPT__', dynamicImports ? scriptTag : bundleTag)
     }
