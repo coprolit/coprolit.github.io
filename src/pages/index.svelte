@@ -39,6 +39,8 @@
     }
 </script>
 
+<!-- routify:options title="Main" -->
+
 <svelte:head>
     <script src="https://smtpjs.com/v3/smtp.js"></script>
 </svelte:head>
@@ -48,7 +50,6 @@
 </p>
 
 <form on:submit|preventDefault={generate}>
-    <!-- <label for="email1">Player A</label> -->
     <input
         type="email"
         name="email1"
@@ -57,7 +58,6 @@
         required
         placeholder="Player's email">
     vs.
-    <!-- <label for="email2">Player B</label> -->
     <input
         type="email"
         name="email2"
