@@ -43,22 +43,30 @@
     <script src="https://smtpjs.com/v3/smtp.js"></script>
 </svelte:head>
 
+<p>
+    Randomly assign a secret side mission to each player:
+</p>
+
 <form on:submit|preventDefault={generate}>
-    <label for="email1">Player #1</label>
+    <!-- <label for="email1">Player A</label> -->
     <input
         type="email"
         name="email1"
-        pattern={emailPattern} title="player 1 email address"
+        pattern={emailPattern}
+        title="player 1 email address"
         required
-        placeholder="Enter email">
-    <br>
-    <label for="email2">Player #2</label>
+        placeholder="Player's email">
+    vs.
+    <!-- <label for="email2">Player B</label> -->
     <input
         type="email"
         name="email2"
-        pattern={emailPattern} title="player 2 email address"
+        pattern={emailPattern}
+        title="player 2 email address"
         required
-        placeholder="Enter email">
-    <br>
-    <input type="submit">
+        placeholder="Player's email">
+    
+    <input
+        type="submit"
+        value="Submit">
 </form>

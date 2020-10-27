@@ -74,10 +74,16 @@ h1 {
 
 a {
 	text-decoration: none;
+	margin-left: .5vw;
 }
 
 nav {
 	position: sticky; top: 0;
-	padding: 2vw 1vw;
+	padding: 12px;
+	background-color: rgb(240,240,240);
 	box-shadow: 0 1px 6px 0 rgba(32,33,36,.28);
+}
+
+main {
+	padding: 12px;
 }
