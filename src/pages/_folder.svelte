@@ -9,7 +9,7 @@
 
 {#each node.children as node}
   <div>
-    <a href={'missions' + $url(node.path)} class:active={$isActive(node.path)}>
+    <a href={$url(node.path).substr(1)} class:active={$isActive(node.path)}>
       {node.title}
     </a>
   </div>
