@@ -1,8 +1,7 @@
 <h1>Mission: No retreat!</h1>
 
-<q>
-  <i>Some introductory intel-like fluff text...</i>
-</q>
+<h2>INTEL</h2>
+<blockquote>Some introductory intel-like fluff text...</blockquote>
 
 <h2>OBJECTIVE</h2>
 <p>
