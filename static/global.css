@@ -86,3 +86,7 @@ nav {
 main {
 	padding: 12px;
 }
+
+q {
+	font-style: italic;
+}
