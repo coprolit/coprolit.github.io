@@ -1,7 +1,8 @@
 Mission:
 <h1>Reckless bravery</h1>
 
-<q><i>Some introductory intel-like fluff text...</i></q>
+<h2>INTEL</h2>
+<blockquote>Some introductory intel-like fluff text...</blockquote>
 
 <h2>OBJECTIVE</h2>
 <p>Do not use a down order during the game.</p>
