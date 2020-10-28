@@ -1,7 +1,8 @@
-Missions:
+Mission:
 <h1>The Mole</h1>
 
-<q><i>INTEL: HQ has made contact with a friendly local close to enemy lines. The local has important information on the enemy positions. Aid in his rescue before the vital information he has falls into enemy hands!</i></q>
+<h2>INTEL</h2>
+<q><i>HQ has made contact with a friendly local close to enemy lines. The local has important information on the enemy positions. Aid in his rescue before the vital information he has falls into enemy hands!</i></q>
 
 <h2>SETUP</h2>
 <p>
