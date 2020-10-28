@@ -10,31 +10,35 @@
     }
 
     function generate(event) {
-        const urls =  Array.from(document.querySelectorAll("a"))
-            .filter(el => el.href.includes('mission'))
-            .map(el => el.href);
-        const randomUrl = urls[getRandomInt(urls.length)];
-        
+        const urls = $layout.parent.children
+            .filter(child => child.path === '/missions')[0]
+            .children
+            .map(child => child.path.slice(1));
+
         // Assign mission to player #1:
+        const randomUrl1 = window.location.href + urls[getRandomInt(urls.length)];
+
         Email.send({
             SecureToken : "0b6eed09-ca2b-41ed-9283-2d33686b5dd2",
             To : event.target.email1.value,
             From : "missions@philippesimpson.dk",
             Subject : "You have been assigned a secret side mission",
-            Body : `See your mission <a href=${randomUrl}>here</a>`
+            Body : `See your mission <a href=${randomUrl1}>here</a>`
         }).then(
-            message => console.log(message)
+            message => console.log(message, event.target.email1.value, randomUrl1)
         );
         
         // Assign mission to player #1:
+        const randomUrl2 = window.location.href + urls[getRandomInt(urls.length)];
+
         Email.send({
             SecureToken : "0b6eed09-ca2b-41ed-9283-2d33686b5dd2",
             To : event.target.email2.value,
             From : "missions@philippesimpson.dk",
             Subject : "You have been assigned a secret side mission",
-            Body : `See your mission <a href=${randomUrl}>here</a>`
+            Body : `See your mission <a href=${randomUrl2}>here</a>`
         }).then(
-            message => console.log(message)
+            message => console.log(message, event.target.email2.value, randomUrl2)
         );
     }
 </script>
