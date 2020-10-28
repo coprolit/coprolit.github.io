@@ -100,6 +100,7 @@ blockquote {
 	font-family: monospace;
     	font-style: italic;
 	padding: 10px;
+	background-color: cornsilk;
     	box-shadow: 0 1px 6px 0 rgba(32,33,36,.28);
     	margin-inline-start: 0;
     	margin-inline-end: 0;
