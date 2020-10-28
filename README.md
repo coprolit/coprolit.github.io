@@ -10,10 +10,10 @@
 
 ## Tech setup
 
-This is a Jamstack app, build with Svelte.
+This is a pre-rendered Jamstack app, build with Svelte.
 
 ### CI/CD
 Any push to `master` triggers a Github Action (see `/.github/workflows/publish.yaml`) that
-1. runs a new, pre-rendered build of the app with current content,
+1. runs a new build of the app with current content,
 2. commits output to a `gh-pages` branch,
-3. from where it is directly deployed to GitHub Pages: https://coprolit.github.io/.
+3. from where it is automatically deployed to GitHub Pages: https://coprolit.github.io/.
