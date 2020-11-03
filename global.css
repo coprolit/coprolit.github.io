@@ -13,16 +13,12 @@ body {
 }
 
 a {
-	color: rgb(0,100,200);
+	color: #5f6368;
 	text-decoration: none;
 }
 
 a:hover {
-	text-decoration: underline;
-}
-
-a:visited {
-	color: rgb(0,80,160);
+	color: #222;
 }
 
 label {
@@ -80,12 +76,27 @@ p {
 a {
 	text-decoration: none;
 }
+a.active {
+	color: black;
+}
+
+header {
+	position: sticky; top: 0;
+	background-color: #f8f9fa;
+	box-shadow: 0 1px 6px 0 rgba(32,33,36,.28);
+	padding: 12px;
+}
+
+.logo {
+	margin-block-start: 0.2em;
+	margin-block-end: 0.2em;
+	font-size: 1.5em;
+	font-weight: 500;
+	font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
 
 nav {
-	position: sticky; top: 0;
-	padding: 12px;
-	background-color: rgb(240,240,240);
-	box-shadow: 0 1px 6px 0 rgba(32,33,36,.28);
+	font-size: .9em;
 }
 
 main {
@@ -98,12 +109,12 @@ q {
 
 blockquote {
 	font-family: monospace;
-    	font-style: italic;
+  font-style: italic;
 	padding: 10px;
 	background-color: cornsilk;
-    	box-shadow: 0 1px 6px 0 rgba(32,33,36,.28);
-    	margin-inline-start: 0;
-    	margin-inline-end: 0;
-    	margin-block-start: 0;
-    	margin-block-end: 0;
+	box-shadow: 0 1px 6px 0 rgba(32,33,36,.28);
+	margin-inline-start: 0;
+	margin-inline-end: 0;
+	margin-block-start: 0;
+	margin-block-end: 0;
 }
