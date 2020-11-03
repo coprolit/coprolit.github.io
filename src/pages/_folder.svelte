@@ -4,18 +4,20 @@
   export let missions = $layout.children.filter(child => child.path === '/missions')[0].children;
 </script>
 
-<nav>
-  <h1>Bolt Action side missions generator</h1>
-  <a href={$url()} class:active={$isActive($url())}>
-    Home
-  </a>
-  {#each missions as node}
-    |
-    <a href={$url(node.path)} class:active={$isActive(node.path)}>
-      {node.title}
+<header>
+  <div class="logo">Bolt Action mission generator</div>
+  <nav>
+    <a href={$url()} class:active={$isActive($url())}>
+      &#127968;
     </a>
-  {/each}
-</nav>
+    {#each missions as node}
+      &middot;
+      <a href={$url(node.path)} class:active={$isActive(node.path)}>
+        {node.title}
+      </a>
+    {/each}
+  </nav>
+</header>
 
 <main>
   <slot />
