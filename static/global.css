@@ -87,6 +87,24 @@ header {
 	padding: 12px;
 }
 
+footer {
+	position: sticky; bottom: 0;
+	box-shadow: 0 1px 6px 0 rgba(32,33,36,.28);
+	border: 1px solid #cccccc;
+	padding: 8px 12px;
+	display: flex;
+	align-items: baseline;
+	margin-left: auto;
+	width: fit-content;
+	font-size: .8em;
+}
+footer > * + * {
+	margin-left: 12px;
+}
+footer input {
+	margin: 0;
+}
+
 .logo {
 	margin-block-start: 0.2em;
 	margin-block-end: 0.2em;
