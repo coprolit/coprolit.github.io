@@ -5,11 +5,10 @@
 </script>
 
 <header>
-  <div class="logo">Bolt Action mission generator</div>
+  <div class="logo">
+    <a href={$url()}>Bolt Action mission generator</a>
+  </div>
   <nav>
-    <a href={$url()} class:active={$isActive($url())}>
-      &#127968;
-    </a>
     {#each missions as node}
       &middot;
       <a href={$url(node.path)} class:active={$isActive(node.path)}>
