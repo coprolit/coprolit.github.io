@@ -9,7 +9,7 @@
     <a href={$url()}>
       <h1>Mission generator</h1>
     </a>
-    <img src="https://cdn.shopify.com/s/files/1/0255/0949/4864/files/NEW_Bolt_Action_logo_BA_header_480x480.png">
+    <img width="24%" src="https://cdn.shopify.com/s/files/1/0255/0949/4864/files/NEW_Bolt_Action_logo_BA_header_480x480.png">
   </div>
   <nav>
     {#each missions as node}
