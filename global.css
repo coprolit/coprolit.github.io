@@ -80,28 +80,33 @@ a.active {
 	color: #5f6368;
 }
 
+header, footer {
+	border: 1px solid #ccc;
+	box-shadow: 0 1px 6px 0 rgba(32,33,36,.28);
+	padding: 12px;
+}
 header {
 	position: sticky;
 	top: 0;
 	background-color: gainsboro;
-	box-shadow: 0 1px 6px 0 rgba(32,33,36,.28);
-	padding: 12px;
 }
 
 footer {
-	position: sticky; bottom: 0;
+	position: sticky;
+	bottom: 0;
 	background-color: #f8f9fa;
 	box-shadow: 0 1px 6px 0 rgba(32,33,36,.28);
-	border: 1px solid #cccccc;
-	padding: 8px 12px;
+	margin: 0 -12px;
+	width: 100%;
 	display: flex;
+	flex-wrap: wrap;
 	align-items: baseline;
-	margin-left: auto;
-	width: fit-content;
+	justify-content: flex-end;
 	font-size: .8em;
 }
-footer > * + * {
-	margin-left: 12px;
+footer > *:first-child {
+	margin-right: 12px;
+	margin-block-end: 6px;
 }
 footer input {
 	margin: 0;
