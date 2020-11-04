@@ -107,14 +107,23 @@ footer input {
 }
 
 .logo {
-	margin-block-start: 0.2em;
-	margin-block-end: 0.2em;
-	font-size: 1.5em;
-	font-weight: 500;
-	font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+	display: flex;
+	margin-block-end: .4em;
 }
 .logo a {
 	color: rgb(50, 50, 50);
+}
+.logo h1 {
+	font-weight: 500;
+	font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+	font-size: 2em;
+	margin-block-start: 0;
+	margin-block-end: 0;
+	margin-right: 4px;
+	display: inline-block;
+}
+.logo img {
+	width: 100px;
 }
 
 nav {
