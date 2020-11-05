@@ -19,9 +19,7 @@
     <script src="https://smtpjs.com/v3/smtp.js"></script>
 </svelte:head>
 
-<main>
-  <slot />
-</main>
+<slot />
 
 <footer>
   <span>Assign this mission to yourself:</span>

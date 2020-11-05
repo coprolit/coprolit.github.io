@@ -5,6 +5,7 @@ html, body {
 
 	--border: 1px solid #eaecef;
 	--box-shadow: 0 0 6px 0 rgba(0,0,0,0.1);
+	--spacing: 12px;
 }
 
 body {
@@ -30,12 +31,16 @@ label {
 
 input, button, select, textarea {
 	font-family: inherit;
-	font-size: inherit;
-	padding: 0.4em;
-	margin: 0 0 0.5em 0;
+	font-size: 0.8rem;
+	padding: 0.4rem;
+	margin: 0 0 0.5rem 0;
 	box-sizing: border-box;
 	border: var(--border);
 	border-radius: 2px;
+}
+
+input[type=email] {
+	background-color: ghostwhite;
 }
 
 input:disabled {
@@ -67,13 +72,13 @@ button:focus {
 /* --- */
 
 h1, h2, h3, h4, h5 {
-	margin-block-start: 0.6em;
-	margin-block-end: 0.2em;
+	margin-block-start: 0.6rem;
+	margin-block-end: 0.2rem;
 }
 
 p {
-	margin-block-start: 0.2em;
-	margin-block-end: 0.2em;
+	margin-block-start: 0.2rem;
+	margin-block-end: 0.2rem;
 }
 
 a {
@@ -92,11 +97,11 @@ header {
 }
 header nav {
 	border-top: var(--border);
-	padding: 12px;
+	padding: var(--spacing);
 }
 
 footer {
-	position: sticky;
+	position: fixed;
 	bottom: 0;
 
 	background-color: white;
@@ -104,8 +109,8 @@ footer {
 	box-shadow: var(--box-shadow);
 	font-size: .8em;
 
-	padding: 12px;
-	margin: 0 -12px;
+	padding: var(--spacing);
+	margin: 0 -36px;
 	width: 100%;
 	display: flex;
 	flex-wrap: wrap;
@@ -113,7 +118,7 @@ footer {
 	justify-content: flex-end;
 }
 footer > *:first-child {
-	margin-right: 12px;
+	margin-right: var(--spacing);
 	margin-block-end: 6px;
 }
 footer input {
@@ -123,7 +128,7 @@ footer input {
 .logo {
 	display: flex;
 	/* margin-block-end: .4em; */
-	padding: 12px;
+	padding: var(--spacing);
 }
 .logo a {
 	color: rgb(50, 50, 50);
@@ -155,7 +160,7 @@ nav {
 }
 
 main {
-	padding: 12px;
+	padding: var(--spacing);
 }
 
 q {
@@ -176,6 +181,6 @@ blockquote {
 
 .repo-link {
 	position: absolute;
-	right: 12px;
-	top: 12px;
+	right: var(--spacing);
+	top: var(--spacing);
 }
