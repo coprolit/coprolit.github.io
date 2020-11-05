@@ -219,6 +219,7 @@ blockquote {
 	border-bottom: 0 solid transparent;
 	border-left: 4px solid transparent;
 	margin-bottom: 2px;
+	color: darkgray;
 }
 
 .missionBtn {
