@@ -125,7 +125,7 @@ header nav a:hover {
 }
 
 footer {
-	position: fixed;
+	position: sticky;
 	bottom: 0;
 
 	background-color: white;
@@ -134,8 +134,7 @@ footer {
 	font-size: small;
 
 	padding: var(--spacing);
-	margin: 0 -36px;
-	width: 100%;
+	margin: 0 var(--spacing);
 	display: flex;
 	flex-wrap: wrap;
 	align-items: baseline;
