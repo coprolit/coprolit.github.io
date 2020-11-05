@@ -12,12 +12,23 @@
     <img width="24%" src="https://cdn.shopify.com/s/files/1/0255/0949/4864/files/NEW_Bolt_Action_logo_BA_header_480x480.png">
   </div>
   <nav>
-    {#each missions as node}
+    <!-- {#each missions as node}
       &middot;
       <a href={$url(node.path)} class:active={$isActive(node.path)}>
         {node.title}
       </a>
-    {/each}
+    {/each} -->
+    
+    <div class="missionsBtn">
+      <span>Missions</span> <span class="dropdown-caret"></span>
+    </div>
+    <div class="dropdown-content">
+      {#each missions as node}
+        <a href={$url(node.path)} class:active={$isActive(node.path)}>
+          {node.title}
+        </a>
+      {/each}
+    </div>
   </nav>
   <a class="repo-link" href="https://github.com/coprolit/coprolit.github.io" title="GitHub repo" style="color: #959da5;">
     <svg height="20" class="octicon octicon-mark-github d-block" alt="" viewBox="0 0 16 16" version="1.1" width="20" aria-hidden="true">
