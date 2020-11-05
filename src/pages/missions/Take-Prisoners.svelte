@@ -1,4 +1,3 @@
-Mission:
 <h1>Take Prisoners</h1>
 
 <h2>Intel</h2>

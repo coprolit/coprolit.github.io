@@ -1,4 +1,3 @@
-Mission:
 <h1>The Mole</h1>
 
 <h2>Intel</h2>

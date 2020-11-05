@@ -1,4 +1,3 @@
-Mission:
 <h1>Reckless bravery</h1>
 
 <h2>Intel</h2>
