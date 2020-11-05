@@ -1,4 +1,3 @@
-Mission
 <h1>Probe enemy defences</h1>
 
 <h2>Intel</h2>
