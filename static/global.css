@@ -3,8 +3,8 @@ html, body {
 	width: 100%;
 	height: 100%;
 
-	--border: 1px solid #eaecef;
-	--box-shadow: 0 0 6px 0 rgba(0,0,0,0.1);
+	--border: 1px solid #dedede;
+	--box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
 	--spacing: 12px;
 }
 
@@ -95,7 +95,7 @@ nav {
 	font-size: .9em;
 	background-color: white;
 	border-bottom: var(--border);
-	/* box-shadow: var(--box-shadow); */
+	box-shadow: var(--box-shadow);
 }
 /* Show the dropdown menu on hover */
 nav:hover .dropdown-content {
@@ -122,16 +122,12 @@ nav a:hover {
 }
 
 footer {
-	position: sticky;
-	bottom: 0;
-
 	background-color: white;
-	border-top: var(--border);
+	border: var(--border);
 	box-shadow: var(--box-shadow);
 	font-size: small;
 
 	padding: var(--spacing);
-	margin: 0 calc(var(--spacing) * -1);
 	display: flex;
 	flex-wrap: wrap;
 	align-items: baseline;
@@ -147,9 +143,7 @@ footer input {
 
 .logo {
 	display: flex;
-	/* margin-block-end: .4em; */
 	padding: var(--spacing);
-	border-bottom: var(--border);
 }
 .logo a {
 	color: rgb(50, 50, 50);
