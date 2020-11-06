@@ -178,7 +178,7 @@ blockquote {
   font-style: italic;
 	padding: 10px;
 	background-color: cornsilk;
-	box-shadow: 0 1px 6px 0 rgba(32,33,36,.28);
+	box-shadow: var(--box-shadow);
 	margin-inline-start: 0;
 	margin-inline-end: 0;
 	margin-block-start: 0;

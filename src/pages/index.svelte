@@ -49,6 +49,17 @@
     <script src="https://smtpjs.com/v3/smtp.js"></script>
 </svelte:head>
 
+<style>
+    img {
+        object-fit: cover;
+        width: 100%;
+        height: 55vw;
+        box-shadow: 1px 1px 5px 0 rgba(0,0,0,.5);
+    }
+</style>
+
+<img src="https://i.redd.it/lpkb2gkaw4s51.jpg" />
+
 <p>
     Randomly assign a secret side mission to each player:
 </p>
