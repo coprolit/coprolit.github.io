@@ -145,10 +145,8 @@ footer input {
 	display: flex;
 	padding: var(--spacing);
 }
-.logo a {
-	color: rgb(50, 50, 50);
-}
 .logo h1 {
+	color: darkolivegreen;
 	font-weight: 500;
 	font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 	font-size: 7vw;
