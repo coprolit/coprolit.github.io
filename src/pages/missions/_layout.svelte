@@ -21,7 +21,7 @@
 
 <slot />
 
-<footer>
+<footer class="border padding">
   <span>Assign this mission to yourself:</span>
   <form on:submit|preventDefault={assign}>
     <input

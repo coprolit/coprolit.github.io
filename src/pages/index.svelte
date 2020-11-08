@@ -76,18 +76,54 @@
     function getScenario(battle, attackerDefender) {
 
         const scenarios = [
-            "Scenario 1 – No Man's Land (Rulebook p.134)",
-            "Scenario 2 – Meeting Engagement (Rulebook p.135)",
-            "Scenario 3 – Key Positions (Rulebook p.136)",
-            "Scenario 4 – Double Envelopment (Rulebook p.137)",
-            "Scenario 5 – Top Secret (Rulebook p.138)",
-            "Scenario 6 – Demolition (Rulebook p.139)",
-            "Scenario 7 – Envelopment (Rulebook p.140)",
-            "Scenario 8 – Manhunt (Rulebook p.142)",
-            "Scenario 9 – Point Defence (Rulebook p.144)",
-            "Scenario 10 – Hold Until Relieved (Rulebook p.145)",
-            "Scenario 11 – Surrounded! (Rulebook p.146)",
-            "Scenario 12 – Sectors (Rulebook p.148)"
+            {
+                title: "No Man's Land",
+                info: "Scenario 1 (Rulebook p.134)"
+            },
+            {
+                title: "Meeting Engagement",
+                info: "Scenario 2 (Rulebook p.135)"
+            },
+            {
+                title: "Key Positions",
+                info: "Scenario 3 (Rulebook p.136)"
+            },
+            {
+                title: "Double Envelopment",
+                info: "Scenario 4 (Rulebook p.137)"
+            },
+            {
+                title: "Top Secret",
+                info: "Scenario 5 (Rulebook p.138)"
+            },
+            {
+                title: "Demolition",
+                info: "Scenario 6 (Rulebook p.139)"
+            },
+            {
+                title: "Envelopment",
+                info: "Scenario 7 (Rulebook p.140)"
+            },
+            {
+                title: "Manhunt",
+                info: "Scenario 8 (Rulebook p.142)"
+            },
+            {
+                title: "Point Defence",
+                info: "Scenario 9 (Rulebook p.144)"
+            },
+            {
+                title: "Hold Until Relieved",
+                info: "Scenario 10 (Rulebook p.145)"
+            },
+            {
+                title: "Surrounded!",
+                info: "Scenario 11 (Rulebook p.146)"
+            },
+            {
+                title: "Sectors",
+                info: "Scenario 12 (Rulebook p.148)"
+            }
         ]
 
         if (battle && attackerDefender) {
@@ -121,10 +157,10 @@
 <h1>Assign objectives</h1>
 
 <p>
-    Randomly assign scenario and/or secret missions:
+    Assign a random scenario and/or secret missions:
 </p>
 
-<div class="shadow padding flow border">
+<div class="padding flow border">
     <form 
         on:submit|preventDefault={generate}
         class="flow"
@@ -147,6 +183,7 @@
                 <label for="attacker-defender">Rulebook Attacker-Defender scenarios</label>
             </div>
         </div>
+        
         <div>
             <input
                 type="checkbox"
@@ -188,7 +225,10 @@
     <div>
         You are to face your opponent in:
     </div>
-    <blockquote>{scenario}</blockquote>
+    <blockquote>
+        <h3>{scenario.title}</h3>
+        {scenario.info}
+    </blockquote>
     {/if}
 
     {#if send1 && send2}

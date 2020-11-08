@@ -4,7 +4,7 @@
   export let missions = $layout.children.filter(child => child.path === '/missions')[0].children;
 </script>
 
-<header>
+<header class="border-bottom">
   <div class="logo">
     <a href={$url()}>
       <h1>Command Post</h1>
@@ -18,7 +18,7 @@
   </a>
 </header>
 
-<nav>
+<nav class="shadow border-bottom padding">
   <!-- {#each missions as node}
     &middot;
     <a href={$url(node.path)} class:active={$isActive(node.path)}>
