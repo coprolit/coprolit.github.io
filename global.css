@@ -4,7 +4,7 @@ html, body {
 	height: 100%;
 
 	--border: 1px solid #dedede;
-	--box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
+	--box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.2);
 	--spacing: 12px;
 }
 
@@ -29,15 +29,11 @@ a:hover {
 	color: #222;
 }
 
-label {
-	display: block;
-}
-
 input, button, select, textarea {
 	font-family: inherit;
 	font-size: 0.8rem;
 	padding: 0.4rem;
-	margin: 0 0 0.5rem 0;
+	/* margin: 0 0 0.5rem 0; */
 	box-sizing: border-box;
 	border: var(--border);
 	border-radius: 2px;
@@ -209,4 +205,36 @@ blockquote {
 .missionBtn {
 	display: flex;
   align-items: center;
+}
+
+.border {
+	border-top: var(--border);
+	border-right: var(--border);
+	border-bottom: var(--border);
+	border-left: var(--border);
+}
+
+.border-bottom {
+	border-bottom: var(--border);
+}
+
+.border-top {
+	border-top: var(--border);
+}
+
+.shadow {
+	box-shadow: var(--box-shadow);
+}
+
+.padding {
+	padding: var(--spacing);
+}
+
+.flow > * + * {
+	margin-top: var(--spacing);
+}
+
+.check-mark {
+	font-size: x-large;
+	color: darkolivegreen;
 }
