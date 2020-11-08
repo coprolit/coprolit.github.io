@@ -20,7 +20,9 @@
 
     function generate(event) {
         // Reset:
-        send1, send2, scenario = false;
+        send1 = false;
+        send2 = false;
+        scenario = false;
 
         if (includeMissions) {
             assignMissions(event.target.email1.value, event.target.email2.value);
@@ -116,8 +118,6 @@
     }
 </style>
 
-<img src="/images/lpkb2gkaw4s51.jpg" alt="mission briefing" />
-
 <h1>Assign objectives</h1>
 
 <p>
@@ -190,7 +190,8 @@
     </div>
     <blockquote>{scenario}</blockquote>
     {/if}
-    {#if (send1 && send2)}
+
+    {#if send1 && send2}
     <div class="border-top"></div>
     <div>
         Secret missions have been assigned and send to each player. <span class="check-mark">&check;</span>
@@ -198,4 +199,4 @@
     {/if}
 </div>
 
-
+<img src="/images/lpkb2gkaw4s51.jpg" alt="mission briefing" />

@@ -38,6 +38,6 @@
   </div>
 </nav>
 
-<main>
+<main class="flow">
   <slot />
 </main>
