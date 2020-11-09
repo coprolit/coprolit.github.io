@@ -206,29 +206,34 @@
         class="flow"
     >
         <div>
+            <small><i>Bolt Action 2 Rulebook:</i></small>
             <div>
                 <input
                     type="checkbox"
                     id="battle"
                     bind:checked={includeBattleScenarios}
                 >
-                <label for="battle"><strong>Battle</strong> scenarios <small><i>Bolt Action 2 Rulebook</i></small></label>
+                <label for="battle"><strong>Battle</strong> scenarios</label>
             </div>
+        
             <div>
                 <input
                     type="checkbox"
                     id="attacker-defender"
                     bind:checked={includeAttDefScenarios}
                 >
-                <label for="attacker-defender"><strong>Attacker-Defender</strong> scenarios <small><i>Bolt Action 2 Rulebook</i></small></label>
+                <label for="attacker-defender"><strong>Attacker-Defender</strong> scenarios</label>
             </div>
+        </div>
+        <div>
+            <small><i>WWPD/Bolt Action Alliance:</i></small>
             <div>
                 <input
                     type="checkbox"
                     id="baa-scenarios"
                     bind:checked={includeBAAScenarios}
                 >
-                <label for="baa-scenarios"><strong>2020 Mission Pack</strong> scenarios <small><i>WWPD/Bolt Action Alliance</i></small></label>
+                <label for="baa-scenarios"><strong>2020 Mission Pack</strong> scenarios</label>
             </div>
         </div>
         
