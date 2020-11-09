@@ -9,13 +9,15 @@
     let includeMissions = false;
     let includeBattleScenarios = false;
     let includeAttDefScenarios = false;
+    let includeBAAScenarios = false;
     let scenario = false;
 
     let send1 = false;
     let send2 = false;
 
-    function getRandomInt(max, min = 0) {
-        return Math.floor(Math.random() * (max - min + 1) + min);
+    function getRandomInt(max) {
+        // return Math.floor(Math.random() * (max - min + 1) + min);
+        return Math.floor(Math.random() * Math.floor(max));
     }
 
     function generate(event) {
@@ -28,8 +30,8 @@
             assignMissions(event.target.email1.value, event.target.email2.value);
         }
         
-        if (includeBattleScenarios || includeAttDefScenarios) {
-            scenario = getScenario(includeBattleScenarios, includeAttDefScenarios);
+        if (includeBattleScenarios || includeAttDefScenarios || includeBAAScenarios) {
+            scenario = getScenario(includeBattleScenarios, includeAttDefScenarios, includeBAAScenarios);
         }
         
     }
@@ -73,9 +75,9 @@
         );
     }
 
-    function getScenario(battle, attackerDefender) {
+    function getScenario(battle, attackerDefender, baa) {
 
-        const scenarios = [
+        const battleScenarios = [
             {
                 title: "No Man's Land",
                 info: "Scenario 1 (Rulebook p.134)"
@@ -99,7 +101,10 @@
             {
                 title: "Demolition",
                 info: "Scenario 6 (Rulebook p.139)"
-            },
+            }
+        ];
+
+        const attDefScenarios = [
             {
                 title: "Envelopment",
                 info: "Scenario 7 (Rulebook p.140)"
@@ -124,19 +129,54 @@
                 title: "Sectors",
                 info: "Scenario 12 (Rulebook p.148)"
             }
-        ]
+        ];
 
-        if (battle && attackerDefender) {
-            return scenarios[getRandomInt(11)];
-        }
+        const baaScenarios = [
+            {
+                title: "Heartbreak Ridge",
+                info: "Bolt Action Alliance 2020 Mission Pack scenario",
+                link: "https://drive.google.com/file/d/1FoDzjibgYJzykMLgvqERwBzAuYbH7x2w/view"
+            },
+            {
+                title: "Kitty Hawk Down",
+                info: "Bolt Action Alliance 2020 Mission Pack scenario",
+                link: "https://drive.google.com/file/d/1FoDzjibgYJzykMLgvqERwBzAuYbH7x2w/view"
+            },
+            {
+                title: "Nuts!",
+                info: "Bolt Action Alliance 2020 Mission Pack scenario",
+                link: "https://drive.google.com/file/d/1FoDzjibgYJzykMLgvqERwBzAuYbH7x2w/view"
+            },
+            {
+                title: "Break Out",
+                info: "Bolt Action Alliance 2020 Mission Pack scenario",
+                link: "https://drive.google.com/file/d/1FoDzjibgYJzykMLgvqERwBzAuYbH7x2w/view"
+            },
+            {
+                title: "Fog of War",
+                info: "Bolt Action Alliance 2020 Mission Pack scenario",
+                link: "https://drive.google.com/file/d/1FoDzjibgYJzykMLgvqERwBzAuYbH7x2w/view"
+            },
+            {
+                title: "Crossfire",
+                info: "Bolt Action Alliance 2020 Mission Pack scenario",
+                link: "https://drive.google.com/file/d/1FoDzjibgYJzykMLgvqERwBzAuYbH7x2w/view"
+            }
+        ];
 
+        let scenarios = [];
+        
         if (battle) {
-            return scenarios[getRandomInt(5)];
+            scenarios = scenarios.concat(battleScenarios);
+        }
+        if (attackerDefender) {
+            scenarios = scenarios.concat(attDefScenarios);
+        }
+        if (baa) {
+            scenarios = scenarios.concat(baaScenarios)
         }
 
-        if (attackerDefender) {
-            return scenarios[getRandomInt(11, 6)];
-        }
+        return scenarios[getRandomInt(scenarios.length)];
     }
 </script>
 
@@ -172,7 +212,7 @@
                     id="battle"
                     bind:checked={includeBattleScenarios}
                 >
-                <label for="battle">Rulebook Battle scenarios</label>
+                <label for="battle"><strong>Battle</strong> scenarios <small><i>Bolt Action 2 Rulebook</i></small></label>
             </div>
             <div>
                 <input
@@ -180,7 +220,15 @@
                     id="attacker-defender"
                     bind:checked={includeAttDefScenarios}
                 >
-                <label for="attacker-defender">Rulebook Attacker-Defender scenarios</label>
+                <label for="attacker-defender"><strong>Attacker-Defender</strong> scenarios <small><i>Bolt Action 2 Rulebook</i></small></label>
+            </div>
+            <div>
+                <input
+                    type="checkbox"
+                    id="baa-scenarios"
+                    bind:checked={includeBAAScenarios}
+                >
+                <label for="baa-scenarios"><strong>2020 Mission Pack</strong> scenarios <small><i>WWPD/Bolt Action Alliance</i></small></label>
             </div>
         </div>
         
@@ -228,6 +276,11 @@
     <blockquote>
         <h3>{scenario.title}</h3>
         {scenario.info}
+        {#if scenario.link}
+        <div>
+            Get scenario <strong><a href="{scenario.link}" target="_blank">here</a></strong>
+        </div>
+        {/if}    
     </blockquote>
     {/if}
 
