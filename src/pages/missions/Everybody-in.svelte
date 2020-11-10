@@ -5,6 +5,3 @@
 
 <h2>Objective</h2>
 <p>Play a game with no reserves used.</p>
-
-<h2>Victory</h2>
-<p>Score one point if you play a game with no reserves used.</p>

@@ -13,8 +13,3 @@
 <p>
   From turn 2 and for the rest of the game, the designated unit must end its turn within 3” of the objective marker.
 </p>
-
-<h2>Victory</h2>
-<p>
-  If you achieve your mission, score +1 point.
-</p>

@@ -5,6 +5,3 @@
 
 <h2>Objective</h2>
 <p>Kill an enemy officer during the game.</p>
-
-<h2>Victory</h2>
-<p>Score one victory point if you kill an enemy officer during the game.</p>

@@ -4,7 +4,4 @@
 <blockquote>We need a handle on the enemy positions.</blockquote>
 
 <h2>Objective</h2>
-<p>The first unit to be pinned must fall back to your own lines to report enemy positions.</p>
-
-<h2>Victory</h2>
-<p>Score one point if first unit to be pinned executes consecutive runs back to own table edge.</p>
+<p>The first unit to be pinned must fall back to your own lines to report enemy positions, using consecutive Run orders until it reaches your own table edge.</p>

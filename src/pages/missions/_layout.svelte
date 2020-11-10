@@ -21,6 +21,14 @@
 
 <slot />
 
+<h2>Victory</h2>
+<p>
+  At the end of the game, if you completed your objective succesfully you treat a <strong>defeat</strong> result in the scenario being played as a <strong>draw</strong>, and a <strong>draw</strong> result as a <strong>victory</strong>.
+</p>
+<p>
+  In case both players have succeeded their objective, the missions are disregarded when working out which side has won, drawn or lost the scenario.
+</p>
+
 <footer class="border padding">
   <span>Assign this mission to yourself:</span>
   <form on:submit|preventDefault={assign}>

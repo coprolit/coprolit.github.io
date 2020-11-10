@@ -5,6 +5,3 @@
 
 <h2>Objective</h2>
 <p>Do not use a down order during the game.</p>
-
-<h2>Victory</h2>
-<p>Score one victory point if you do not use a down order during the game.</p>

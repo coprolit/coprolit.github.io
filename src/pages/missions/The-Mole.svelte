@@ -13,9 +13,3 @@
 <p>
   The local needs to leave the table by moving into contact with your own table edge.
 </p>
-
-<h2>Victory</h2>
-<p>
-  If the local manages to leave the table, when the game ends you treat a defeat result in the scenario being played as a draw, and a draw result as a victory.
-  On the other hand, if the local is killed before he leaves the table, when the game ends the opponent treats a defeat result in the scenario being played as a draw, and a draw result as a victory.
-</p>
