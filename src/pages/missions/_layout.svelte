@@ -29,7 +29,7 @@
   In case both players have succeeded their objective, the missions are disregarded when working out which side has won, drawn or lost the scenario.
 </p>
 
-<footer class="border padding panel">
+<footer class="border panel shadow">
   <span>Assign this mission to yourself:</span>
   <form on:submit|preventDefault={assign}>
     <input
