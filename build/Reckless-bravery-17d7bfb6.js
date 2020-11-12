@@ -1,2 +1,2 @@
 import{S as t,i as e,s as n,e as o,a as s,c as a,n as r,f as i}from"./main.js";function l(t){let e,n,l,u,c,x,d,f,m;return{c(){e=o("h1"),e.textContent="Reckless bravery",n=s(),l=o("h2"),l.textContent="Intel",u=s(),c=o("blockquote"),c.textContent="Some introductory intel-like fluff text...",x=s(),d=o("h2"),d.textContent="Objective",f=s(),m=o("p"),m.textContent="Do not use a down order during the game."},m(t,o){a(t,e,o),a(t,n,o),a(t,l,o),a(t,u,o),a(t,c,o),a(t,x,o),a(t,d,o),a(t,f,o),a(t,m,o)},p:r,i:r,o:r,d(t){t&&i(e),t&&i(n),t&&i(l),t&&i(u),t&&i(c),t&&i(x),t&&i(d),t&&i(f),t&&i(m)}}}export default class extends t{constructor(t){super(),e(this,t,null,l,n,{})}}
-//# sourceMappingURL=Reckless-bravery-ec565eed.js.map
+//# sourceMappingURL=Reckless-bravery-17d7bfb6.js.map
