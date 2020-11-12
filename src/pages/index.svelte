@@ -200,7 +200,7 @@
     Assign a random scenario and/or secret missions:
 </p>
 
-<div class="padding flow border">
+<div class="padding flow border panel">
     <form 
         on:submit|preventDefault={generate}
         class="flow"
