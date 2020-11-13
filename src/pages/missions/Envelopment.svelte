@@ -5,5 +5,5 @@
 
 <h2>Objective</h2>
 <p>
-  During the game have a unit come in from Outflank and end its turn in the enemy's deployment zone.
+  During the game have a unit move onto the table from outflank and end its turn in the enemy's table half.
 </p>
