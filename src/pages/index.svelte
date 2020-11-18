@@ -180,7 +180,7 @@
     }
 </script>
 
-<!-- routify:options title="Main" -->
+<!-- routify:options title="Generator" -->
 
 <svelte:head>
     <script src="https://smtpjs.com/v3/smtp.js"></script>

@@ -1,7 +1,5 @@
 <script>
   import { isActive, url, layout } from "@roxi/routify";
-  
-  export let missions = $layout.children.filter(child => child.path === '/missions')[0].children;
 </script>
 
 <header class="border-bottom">
@@ -19,23 +17,24 @@
 </header>
 
 <nav class="shadow border-bottom padding">
-  <!-- {#each missions as node}
+  <!-- {#each links as node}
     &middot;
     <a href={$url(node.path)} class:active={$isActive(node.path)}>
       {node.title}
     </a>
   {/each} -->
-  
-  <div class="missionsBtn">
-    <span>Missions</span> <span class="dropdown-caret"></span>
-  </div>
-  <div class="dropdown-content">
-    {#each missions as node}
-      <a href={$url(node.path)} class:active={$isActive(node.path)}>
-        {node.title}
-      </a>
-    {/each}
-  </div>
+
+  <a href={$url('/missions')} class:active={$isActive('/missions')}>
+    &middot; Missions
+  </a>
+
+  <a href={$url('')} class:active={$isActive('')}>
+    &middot; Generator
+  </a>
+
+  <a href={$url('/about')} class:active={$isActive('/about')}>
+    &middot; About
+  </a>
 </nav>
 
 <main class="flow">
