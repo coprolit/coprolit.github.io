@@ -8,7 +8,7 @@
 
 <h1>Missions</h1>
 <p>
-  Missions form <strong>secondary objectives</strong> in a game of Bolt Action, affecting the outcome of the scenario played.
+  Missions are optional <strong>secondary objectives</strong> in a game of Bolt Action, that can affect the outcome of the scenario played.
 </p>
 
 <p>
