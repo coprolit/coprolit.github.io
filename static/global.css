@@ -244,3 +244,7 @@ blockquote {
 fieldset > legend {
 	margin-block-end: calc(var(--spacing) * -1);
 }
+
+.text-grey-light {
+	color: gainsboro;
+}

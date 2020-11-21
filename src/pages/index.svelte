@@ -290,7 +290,7 @@
         </div>
     </fieldset>
 
-    <fieldset class="border flow">
+    <fieldset class="border flow text-grey-light">
         <legend><small>Battlefield Condition</small></legend>
         <div>
             <input
