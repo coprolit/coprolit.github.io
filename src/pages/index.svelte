@@ -11,6 +11,7 @@
     let includeAttDefScenarios = false;
     let includeBAAScenarios = false;
     let scenario = false;
+    let includeConditions = false;
 
     let send1 = false;
     let send2 = false;
@@ -178,6 +179,23 @@
 
         return scenarios[getRandomInt(scenarios.length)];
     }
+
+    function getCondition() {
+        const conditions = [
+            {
+                title: "Fuel and Ammunition Shortage",
+                desc: "Due to prolonged fighting, tanks, armoured cars, tank destroyers, self-propelled artillery and anti-aircraft vehicles start the game with one pinning marker that may not be removed."
+            },
+            {
+                title: "Heavy Rain",
+                desc: "Weeklong downpour has made off-road movement difficult even for tanks. All Open Ground is treated as Rough Ground instead."
+            },
+            {
+                title: "Starvation",
+                desc: "Food supplies have dwindled away and the men are weak. All infantry Run at Advance speed and loose any Tough Fighter abilities."
+            },
+        ]
+    }
 </script>
 
 <!-- routify:options title="Generator" -->
@@ -200,11 +218,12 @@
     Assign a random scenario and/or secret missions:
 </p>
 
-<div class="padding flow border panel shadow">
-    <form 
-        on:submit|preventDefault={generate}
-        class="flow"
-    >
+<form 
+    on:submit|preventDefault={generate}
+    class="flow"
+>
+    <fieldset class="border flow">
+        <legend><small>Scenario</small></legend>
         <div>
             <small><i>Bolt Action 2 Rulebook:</i></small>
             <div>
@@ -225,6 +244,7 @@
                 <label for="attacker-defender"><strong>Attacker-Defender</strong> scenarios</label>
             </div>
         </div>
+    
         <div>
             <small><i>WWPD/Bolt Action Alliance:</i></small>
             <div>
@@ -236,13 +256,16 @@
                 <label for="baa-scenarios"><strong>2020 Mission Pack</strong> scenarios</label>
             </div>
         </div>
-        
+    </fieldset>
+    
+    <fieldset class="border flow">
+        <legend><small>Secret missions</small></legend>
         <div>
             <input
                 type="checkbox"
                 id="mission"
                 bind:checked={includeMissions}>
-            <label for="mission">Secret missions</label>
+            <label for="mission">Secondary Objectives</label>
 
             {#if includeMissions}
             <div>
@@ -265,16 +288,29 @@
             </div>
             {/if}
         </div>
-        
+    </fieldset>
+
+    <fieldset class="border flow">
+        <legend><small>Battlefield Condition</small></legend>
         <div>
             <input
-                type="submit"
-                value="Generate">
+                disabled
+                type="checkbox"
+                id="condition"
+                bind:checked={includeConditions}>
+            <label for="mission">50% of an unusual Battlefield Condition taking effect</label>
         </div>
-    </form>
+    </fieldset>
+    
+    <div>
+        <input
+            type="submit"
+            value="Generate">
+    </div>
+</form>
 
-    {#if scenario}
-    <div class="border-top"></div>
+{#if scenario}
+<div class="padding flow border panel shadow">   
     <div>
         You are to face your opponent in:
     </div>
@@ -287,14 +323,13 @@
         </div>
         {/if}    
     </blockquote>
-    {/if}
-
-    {#if send1 && send2}
-    <div class="border-top"></div>
-    <div>
-        Secret missions have been assigned and send to each player. <span class="check-mark">&check;</span>
-    </div>
-    {/if}
 </div>
+{/if}
+
+{#if send1 && send2}
+<div class="padding flow border panel shadow">
+    Secret missions have been assigned and send to each player. <span class="check-mark">&check;</span>
+</div>
+{/if}
 
 <img src="/images/lpkb2gkaw4s51.jpg" alt="mission briefing" />
