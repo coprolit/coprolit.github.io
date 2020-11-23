@@ -15,12 +15,13 @@
   Use the generator to get random missions assigned to each player, or pick a mission and assign it manually.
 </p>
 
-<div class="padding flow">
-{#each missions as node}
+<fieldset class="border flow">
+  <legend><small>Missions</small></legend>
+  {#each missions as node}
   <div>
     <a href={$url(node.path)} class:active={$isActive(node.path)}>
       &middot; {node.title}
     </a>
   </div>
-{/each}
-</div>
+  {/each}
+</fieldset>
