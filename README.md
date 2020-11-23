@@ -4,7 +4,7 @@
 
 1. Go to `/src/pages/missions`.
 2. Add a new `.svelte` or `.html` file, e.g. `no-retreat.svelte`.
-3. Add content (mission title, introductory intel fluff, objective and victory condition text).
+3. Add content (mission title, fluffy SITREP, and the objective description).
 4. Commit directly to the master branch.
 5. Wait a few seconds for Github to build a new web app, then check result on https://coprolit.github.io/. 
 
