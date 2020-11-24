@@ -192,7 +192,7 @@
             },
             {
                 title: "Starvation",
-                desc: "Food supplies have dwindled away and the men are weak. All infantry Run at Advance speed and loose any Tough Fighter abilities."
+                desc: "Food supplies have dwindled away and the men are weak. All infantry loose any Tough Fighter abilities, and Run at D6+6 inch speed."
             },
             {
                 title: "Ammunition Shortage",
