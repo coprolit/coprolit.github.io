@@ -183,8 +183,8 @@
     function getCondition() {
         const conditions = [
             {
-                title: "Fuel and Ammunition Shortage",
-                desc: "Due to prolonged fighting, tanks, armoured cars, tank destroyers, self-propelled artillery and anti-aircraft vehicles start the game with one pinning marker that may not be removed."
+                title: "Fuel Shortage",
+                desc: "Due to prolonged fighting, each player rolls a D6+2 for each of their vehicles, the sum is the player's total Fuel units. Split fuel units between the vehicles and mark down in secret. A Run or Advance order consumes a fuel unit."
             },
             {
                 title: "Heavy Rain",
@@ -193,6 +193,10 @@
             {
                 title: "Starvation",
                 desc: "Food supplies have dwindled away and the men are weak. All infantry Run at Advance speed and loose any Tough Fighter abilities."
+            },
+            {
+                title: "Ammunition Shortage",
+                desc: "Can only give half of all units a Fire, Advance or Ambush order in a turn. Start of Round 3 there are airdrops incoming. Player choose the drop point and it deviates 4D6 in a random direction. Get in base contact with it = all units can fire, advance or ambush the current and next round."
             },
         ]
     }
