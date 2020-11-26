@@ -1,7 +1,7 @@
 <script>
     import { metatags, layout, url } from '@roxi/routify';
-    metatags.title = 'Mission generator';
-    metatags.description = 'Description coming soon...';
+    metatags.title = 'Command Post';
+    metatags.description = 'Scenario and Missions generator.';
 
     const emailPattern = "[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$";
 
