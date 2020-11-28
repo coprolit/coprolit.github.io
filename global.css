@@ -162,6 +162,7 @@ main {
 }
 
 blockquote {
+	display: inline-block;
 	font-family: monospace;
   font-style: italic;
 	padding: 10px;
@@ -247,4 +248,8 @@ fieldset > legend {
 
 .text-grey-light {
 	color: gainsboro;
+}
+
+figure img {
+	max-width: 640px;
 }
