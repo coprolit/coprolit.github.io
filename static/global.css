@@ -163,9 +163,10 @@ main {
 
 blockquote {
 	display: inline-block;
-	font-family: monospace;
-  font-style: italic;
-	padding: 10px;
+	font-family: 'Caveat', cursive;
+  font-size: x-large;
+	padding: var(--spacing);
+	color: midnightblue;
 	background-color: cornsilk;
 	box-shadow: var(--box-shadow);
 	margin-inline-start: 0;

@@ -1,7 +1,7 @@
 <h1>Fuel Shortage</h1>
 
 <h2>Intel</h2>
-<blockquote>Our supply lines are failing. We must conserve fuel!</blockquote>
+<blockquote>Our supply lines are failing. You must conserve fuel!</blockquote>
 
 <h2>Objective</h2>
 <p>

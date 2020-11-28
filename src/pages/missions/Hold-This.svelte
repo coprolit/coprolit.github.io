@@ -14,5 +14,5 @@
 
 <h2>Objective</h2>
 <p>
-  At the <strong>end of every turn</strong> of the game a model of a friendly unit must be within 3” of the objective marker.
+  At the <strong>end of every turn</strong> of the game a model of a friendly unit must be <strong>within 3”</strong> of the objective marker.
 </p>
