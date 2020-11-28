@@ -290,6 +290,7 @@
                     placeholder="Player's email"
                 >
             </div>
+            <p><small><i>Each player receives an assigned mission via email.</i></small></p>
             {/if}
         </div>
     </fieldset>
