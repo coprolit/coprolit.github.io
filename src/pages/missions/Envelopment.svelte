@@ -9,5 +9,5 @@
 </p>
 
 <figure>
-  <img src="https://docs.google.com/drawings/d/e/2PACX-1vQBdOPz8DKodOB4qsQD02GEaOQ4bZ7vu5RxIDK0sXiYm6T2_arDBtBD6UQP-DIfmkTCgBUtKR4v9Sjq/pub?w=1728&amp;h=1153">
+  <img width="100%" src="https://docs.google.com/drawings/d/e/2PACX-1vQBdOPz8DKodOB4qsQD02GEaOQ4bZ7vu5RxIDK0sXiYm6T2_arDBtBD6UQP-DIfmkTCgBUtKR4v9Sjq/pub?w=1728&amp;h=1153">
 </figure>

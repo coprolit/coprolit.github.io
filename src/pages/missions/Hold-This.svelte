@@ -9,7 +9,7 @@
 </p>
 
 <figure>
-  <img src="https://docs.google.com/drawings/d/e/2PACX-1vRjI8MfSEEU7N2OdjGw8W2ldgyEhEfEvXaJt-7mpzX0ZiwqM7XWiEyONNyAQG2uNwlPJb7qS-4Hxy_w/pub?w=1728&amp;h=1153">
+  <img width="100%" src="https://docs.google.com/drawings/d/e/2PACX-1vRjI8MfSEEU7N2OdjGw8W2ldgyEhEfEvXaJt-7mpzX0ZiwqM7XWiEyONNyAQG2uNwlPJb7qS-4Hxy_w/pub?w=1728&amp;h=1153">
 </figure>
 
 <h2>Objective</h2>
