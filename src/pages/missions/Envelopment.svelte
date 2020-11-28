@@ -5,5 +5,9 @@
 
 <h2>Objective</h2>
 <p>
-  At the end of the game you must have a unit within 6” of opponent's table edge.
+  At the <strong>end of the game</strong> you must have a unit partially or fully within 12” of opponent's table edge.
 </p>
+
+<figure>
+  <img src="https://docs.google.com/drawings/d/e/2PACX-1vQBdOPz8DKodOB4qsQD02GEaOQ4bZ7vu5RxIDK0sXiYm6T2_arDBtBD6UQP-DIfmkTCgBUtKR4v9Sjq/pub?w=1728&amp;h=1153">
+</figure>
