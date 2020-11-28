@@ -319,15 +319,15 @@
     <div>
         You are to face your opponent in:
     </div>
-    <blockquote>
-        <h3>{scenario.title}</h3>
-        {scenario.info}
-        {#if scenario.link}
-        <div>
-            Get scenario <strong><a href="{scenario.link}" target="_blank">here</a></strong>
-        </div>
-        {/if}    
-    </blockquote>
+    
+    <h3>{scenario.title}</h3>
+    {scenario.info}
+    {#if scenario.link}
+    <div>
+        Get scenario <strong><a href="{scenario.link}" target="_blank">here</a></strong>
+    </div>
+    {/if}    
+
 </div>
 {/if}
 
