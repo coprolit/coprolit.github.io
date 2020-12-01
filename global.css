@@ -6,6 +6,9 @@ html, body {
 	--border: 1px solid #dedede;
 	--box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.2);
 	--spacing: 12px;
+	--spacing-small: calc(var(--spacing) / 2);
+
+	--color-gold: #FFDF00;
 }
 
 body {
@@ -113,7 +116,7 @@ nav a:not(:last-child) {
 	margin-right: 10px;
 }
 
-footer {
+main > footer {
 	font-size: small;
 	display: flex;
 	flex-wrap: wrap;
@@ -125,19 +128,22 @@ footer {
 	padding: calc(var(--spacing) / 2);
 	line-height: normal;
 }
-footer > *:first-child {
+main > footer > *:first-child {
 	margin-right: var(--spacing);
 	margin-block-end: 6px;
 }
-footer input {
+main > footer input {
 	margin: 0;
+}
+
+fieldset > footer {
+	margin: calc(var(--spacing) * -1);
 }
 
 .logo {
 	display: flex;
 }
 .logo h1 {
-	color: darkolivegreen;
 	font-weight: 500;
 	font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 	font-size: 7vw;
@@ -188,21 +194,6 @@ blockquote {
 	top: var(--spacing);
 }
 
-/* .dropdown-caret {
-	display: inline-block;
-	width: 0;
-	height: 0;
-	vertical-align: middle;
-	content: "";
-	border-top-style: solid;
-	border-top-width: 4px;
-	border-right: 4px solid transparent;
-	border-bottom: 0 solid transparent;
-	border-left: 4px solid transparent;
-	margin-bottom: 2px;
-	color: darkgray;
-} */
-
 .border {
 	border-top: var(--border);
 	border-right: var(--border);
@@ -225,6 +216,9 @@ blockquote {
 .padding {
 	padding: var(--spacing);
 }
+.margin-right-small {
+	margin-right: var(--spacing-small);
+}
 
 .flow > * + * {
 	margin-top: var(--spacing);
@@ -246,21 +240,43 @@ blockquote {
 	background-color: white;
 }
 
-.text-small {
-	font-size: small;
-}
-
 fieldset > legend {
 	margin-block-end: calc(var(--spacing) * -1);
 }
 
-.text-grey-light {
-	color: gainsboro;
+.color-brand-light {
+	color: #808000;
 }
-.text-khaki-dark {
-	color: darkkhaki;
+.color-brand-dark {
+	color: #556b2f;
+}
+.color-dark {
+	color: rgba(117, 117, 117);
+}
+.color-accent {
+	color: chocolate;
+}
+.color-inactive {
+	color: lightgrey;
+}
+
+.bg-grey {
+	background-color: gainsboro;
 }
 
 figure img {
 	max-width: 640px;
+}
+
+.flex {
+	display: flex;
+}
+
+.info-box {
+	font-size: .9rem;
+	line-height: 130%;
+	background-color: white;
+	padding: calc(var(--spacing) / 2);
+	border-radius: 10px;
+  border: 1px solid gainsboro;
 }
