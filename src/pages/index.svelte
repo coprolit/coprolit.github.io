@@ -216,10 +216,10 @@
     }
 </style>
 
-<h1>Assign objectives</h1>
+<h1>Generator</h1>
 
 <p>
-    Assign a random scenario and/or secret missions:
+    Select your preferred options below and generate a random game of Bolt Action.
 </p>
 
 <form 
@@ -227,7 +227,10 @@
     class="flow"
 >
     <fieldset class="border flow">
-        <legend><small>Scenario</small></legend>
+        <legend>
+                <strong>Scenario</strong>
+        </legend>
+        
         <div>
             <small><i>Bolt Action 2 Rulebook:</i></small>
             <div>
@@ -260,16 +263,24 @@
                 <label for="baa-scenarios"><strong>2020 Mission Pack</strong> scenarios</label>
             </div>
         </div>
+        
+        <div class="info-box flex">
+            <div class="margin-right-small">&#9432;</div>
+            <div>Scenarios provide the <strong>main</strong> objective and victory condition for each player.</div>
+        </div>
     </fieldset>
     
     <fieldset class="border flow">
-        <legend><small>Secret missions</small></legend>
+        <legend>
+            <strong>Secret missions</strong>
+        </legend>
+        
         <div>
             <input
                 type="checkbox"
                 id="mission"
                 bind:checked={includeMissions}>
-            <label for="mission">Secondary Objectives</label>
+            <label for="mission">Assign a mission to each player</label>
 
             {#if includeMissions}
             <div>
@@ -290,12 +301,17 @@
                     placeholder="Player's email"
                 >
             </div>
-            <p><small><i>Each player receives an assigned mission via email.</i></small></p>
+            <p><small><i>Each player receives their secret mission via email.</i></small></p>
             {/if}
+        </div>
+
+        <div class="info-box flex">
+            <div class="margin-right-small">&#9432;</div>
+            <div>Missions add a <strong>secondary</strong> objective for each player.<br> Achieving a mission objective helps the player towards winning the played Scenario.</div>
         </div>
     </fieldset>
 
-    <fieldset class="border flow text-grey-light">
+    <fieldset class="border flow color-inactive">
         <legend><small>Battlefield Condition</small></legend>
         <div>
             <input
@@ -304,6 +320,10 @@
                 id="condition"
                 bind:checked={includeConditions}>
             <label for="mission">50% of an unusual Battlefield Condition taking effect</label>
+        </div>
+        <div class="info-box flex">
+            <div class="margin-right-small">&#9432;</div>
+            <div>Battlefield Conditions are gameplay modifying rules applying for both players.</div>
         </div>
     </fieldset>
     
