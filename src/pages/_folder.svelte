@@ -2,12 +2,21 @@
   import { isActive, url, layout } from "@roxi/routify";
 </script>
 
-<header class="border-bottom">
+<header class="border-bottom padding">
   <div class="logo">
     <a href={$url()}>
       <h1>Command Post</h1>
     </a>
     <img width="24%" src="https://cdn.shopify.com/s/files/1/0255/0949/4864/files/NEW_Bolt_Action_logo_BA_header_480x480.png">
+  </div>
+  <div class="tagline">
+    <strong class="text-khaki-dark">
+      <small>
+        <i>
+          Your one stop destination for starting up a Bolt Action game.
+        </i>
+      </small>
+    </strong>
   </div>
 </header>
 

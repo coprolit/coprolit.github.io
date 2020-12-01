@@ -98,6 +98,10 @@ header:after{
   transform:rotate(45deg);
 }
 
+header small {
+	font-size: 12px;
+}
+
 nav {
 	position: sticky;
 	top: 0;
@@ -131,7 +135,6 @@ footer input {
 
 .logo {
 	display: flex;
-	padding: var(--spacing);
 }
 .logo h1 {
 	color: darkolivegreen;
@@ -153,6 +156,10 @@ footer input {
 	}
 	.logo img {
 		width: 180px;
+	}
+
+	header small {
+		font-size: 18px;
 	}
 }
 
@@ -249,6 +256,9 @@ fieldset > legend {
 
 .text-grey-light {
 	color: gainsboro;
+}
+.text-khaki-dark {
+	color: darkkhaki;
 }
 
 figure img {
