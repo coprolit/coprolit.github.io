@@ -10,7 +10,7 @@
     <img width="24%" src="https://cdn.shopify.com/s/files/1/0255/0949/4864/files/NEW_Bolt_Action_logo_BA_header_480x480.png">
   </div>
   <div class="tagline">
-    <strong class="color-brand-light">
+    <strong class="color-grey">
       <small>
         <i>
           Your one stop destination for starting up a Bolt Action game.
@@ -32,7 +32,7 @@
     &middot; Missions
   </a>
 
-  <a href={$url('')} class:active={$isActive('')}>
+  <a href={$url('/generator')} class:active={$isActive('/generator')}>
     &middot; Generator
   </a>
 

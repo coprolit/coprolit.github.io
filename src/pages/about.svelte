@@ -1,7 +1,7 @@
 <!-- routify:options title="About" -->
 
 <p>
-  The Command Post is an collection of <i>unofficial</i> missions offering an extra tactical layer to your game of Bolt Action.
+  The Command Post is an collection of <strong>unofficial</strong> missions offering an extra tactical layer to your game of Bolt Action.
 </p>
 
 <p>
@@ -39,3 +39,13 @@
     Submit suggestions <strong><a href="mailto:missions@philippesimpson.dk">here</a></strong>.
   </div>
 </div>
+
+<h2>
+  Notice of Non-Affiliation and Disclaimer
+</h2>
+<p>
+  We are not affiliated, associated, authorized, endorsed by, or in any way officially connected with <strong>Warlords Games</strong>.
+</p>
+<p>
+  The name <strong>Bolt Action</strong> as well as related names, marks, emblems and images are registered trademarks of the respective owner.
+</p>
