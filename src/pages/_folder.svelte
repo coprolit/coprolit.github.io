@@ -5,9 +5,9 @@
 <header class="border-bottom padding">
   <div class="logo">
     <a class="color-brand-dark" href={$url()}>
-      <h1>Command Post</h1>
+      Command Post
     </a>
-    <img width="24%" src="https://cdn.shopify.com/s/files/1/0255/0949/4864/files/NEW_Bolt_Action_logo_BA_header_480x480.png">
+    <img width="100%" src="https://cdn.shopify.com/s/files/1/0255/0949/4864/files/NEW_Bolt_Action_logo_BA_header_480x480.png">
   </div>
   <div class="tagline">
     <strong class="color-grey">
