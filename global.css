@@ -109,10 +109,6 @@ header:after{
   transform:rotate(45deg);
 }
 
-header small {
-	font-size: 12px;
-}
-
 nav {
 	position: sticky;
 	top: 0;
@@ -151,29 +147,33 @@ fieldset > footer {
 .logo {
 	display: flex;
 }
-.logo h1 {
+.logo a {
 	font-weight: 500;
 	font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-	font-size: 7vw;
+	font-size: 10vw;
 	margin-block-start: 0;
 	margin-block-end: 0;
 	margin-right: 1vw;
 	display: inline-block;
 }
 .logo img {
-	width: 20vw;
+	width: 30vw;
 }
 
-@media screen and (min-width: 640px) {
-  .logo h1 {
-     font-size: 56px;
+.tagline {
+	font-size: 3.7vw;
+}
+
+@media screen and (min-width: 768px) {
+	.logo a {
+		font-size: 6vw;
 	}
 	.logo img {
-		width: 180px;
+		width: 18vw;
 	}
-
-	header small {
-		font-size: 18px;
+	
+	.tagline {
+		font-size: 2.3vw;
 	}
 }
 
