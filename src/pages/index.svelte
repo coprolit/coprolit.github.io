@@ -16,10 +16,6 @@
 </style>
 
 <div class="flow">
-    <p>
-        <i></i>
-    </p>
-    
     <h1>About to start up a Bolt Action game?</h1>
     <div>Welcome to the <strong>Command Post</strong>, a collection of tools and content to spice up your <strong>Bolt Action</strong> game.</div>
 

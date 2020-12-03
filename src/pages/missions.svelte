@@ -12,7 +12,7 @@
 </p>
 
 <p>
-  Use the generator to get random missions assigned to each player, or pick a mission and assign it manually.
+  Use the <a href={$url('/generator')}>Generator</a> to get random missions assigned to each player, or pick a mission and assign it manually.
 </p>
 
 <fieldset class="border flow">
