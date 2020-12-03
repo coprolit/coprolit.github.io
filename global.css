@@ -156,6 +156,9 @@ fieldset > footer {
 	margin-right: 1vw;
 	display: inline-block;
 }
+.logo a, .logo a.active, .logo a.hover {
+	color: darkolivegreen;
+}
 .logo img {
 	width: 30vw;
 }
