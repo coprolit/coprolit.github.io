@@ -1,47 +1,28 @@
+<script>
+  import { url } from '@roxi/routify';
+</script>
 <!-- routify:options title="About" -->
 
+<h1>About</h1>
+
 <p>
-  The Command Post is an collection of <strong>unofficial</strong> missions offering an extra tactical layer to your game of Bolt Action.
+  The <strong>Command Post</strong> is a hobby project made by <strong>Bolt Action</strong> fans.
 </p>
 
 <p>
-  Missions are intended as a supplement to the main objective of the scenario played. Using missions, each player gets assigned a <strong>secondary objective</strong>. Succeeding or failing this objective can influence the outcome of game.
+  We have plans to expand the service to include battlefield conditions, nationality based side missions and more.
 </p>
 
 <p>
-  As a bonus, The Command Post helps you automate the process of deciding on a scenario to play, and assigning a secret mission to each player.
+   Please note that as of now this is a work in progress - therefore we kindly ask that you <a href={$url('/feedback')}>submit</a> any and all thoughts, ideas and any issues that you encounter while using the tool.
 </p>
 
-<div class="flow panel border shadow padding">
-  <h3>Have feedback? Have an idea for a new mission?</h3>
-  <p>
-    We welcome your suggestions! First, consider the following:
-  </p>
-  <ul>
-    <li>
-      Missions are intended to add extra tactical depth and decision making to a game of Bolt Action.
-    </li>
-    <li>
-      A mission takes the form of a <strong>secondary</strong> objective that is achievable by <strong>any</strong> force selection.
-    </li>
-    <li>
-      Missions affect the outcome of, but are subordinate to, the main scenario.
-    </li>
-    <li>
-      The player should have to dedicate a limited part of his/her force during a game to succeed in the mission - e.g. a specific unit for most of the game, several units during a single turn, or similar.
-    </li>
-    <li>
-      Ideally, the succes of a mission can be determined either at a turn end phase or at the end of the game, based on e.g. whether one or more units or models are destroyed or on the table in a specific area. Missions should avoid relying on players' memory of how an hours long game progressed, turn by turn.
-    </li>
-  </ul>
-  
-  <div> 
-    Submit suggestions <strong><a href="mailto:missions@philippesimpson.dk">here</a></strong>.
-  </div>
-</div>
+<h3>
+  Thanks a lot for giving it a try.
+</h3>
 
 <h2>
-  Notice of Non-Affiliation and Disclaimer
+  Disclaimer
 </h2>
 <p>
   We are not affiliated, associated, authorized, endorsed by, or in any way officially connected with <strong>Warlords Games</strong>.

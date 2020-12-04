@@ -46,7 +46,7 @@
         - therefore we kindly ask that you submit any and all thoughts, ideas and any issues that you encounter while using the tool.
     </div>
     <div>
-        Submit feedback <a href={$url('/about')}>here</a>.
+        Submit feedback <a href={$url('/feedback')}>here</a>.
     </div>
 
     <h3>Thanks a lot for giving it a try.</h3>

@@ -20,7 +20,7 @@
   {#each missions as node}
   <div>
     <a href={$url(node.path)} class:active={$isActive(node.path)}>
-      &middot; {node.title}
+      {node.title}
     </a>
   </div>
   {/each}
