@@ -9,12 +9,10 @@
     </a>
     <img width="100%" src="https://cdn.shopify.com/s/files/1/0255/0949/4864/files/NEW_Bolt_Action_logo_BA_header_480x480.png">
   </div>
-  <div class="tagline color-grey">
-    <strong>
-        <i>
-          Your one stop destination for starting up a Bolt Action game.
-        </i>
-    </strong>
+  <div class="tagline">
+    <i>
+      Your one stop destination for starting up a Bolt Action game.
+    </i>
   </div>
 </header>
 
