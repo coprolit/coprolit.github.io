@@ -23,15 +23,19 @@
   Use the <a href={$url('/generator')}>Generator</a> to get random missions assigned to each player, or pick a mission and assign it manually.
 </p>
 
-<fieldset class="border flow">
-  <legend><small>Missions</small></legend>
-  {#each missions as node}
-  <div>
-    <a href={$url(node.path)} class:active={$isActive(node.path)}>
-      {node.title}
-    </a>
-  </div>
-  {/each}
-</fieldset>
 
-<img src="https://dfqld92tmbtun.cloudfront.net/battles/86/photos/008195.jpg" alt="command post" />
+  <fieldset class="border flow">
+    <legend><small>Missions</small></legend>
+    <div class="two-column">
+      <div>
+        {#each missions as node}
+        <div>
+          <a href={$url(node.path)} class:active={$isActive(node.path)}>
+            {node.title}
+          </a>
+        </div>
+        {/each}
+      </div>
+      <img src="https://dfqld92tmbtun.cloudfront.net/battles/86/photos/008195.jpg" alt="command post" />
+    </div>
+  </fieldset>

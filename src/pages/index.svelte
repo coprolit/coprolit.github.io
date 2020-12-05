@@ -214,6 +214,27 @@
         width: 100%;
         box-shadow: 1px 1px 5px 0 rgba(0,0,0,.5);
     }
+
+    form.flex {
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+
+    fieldset {
+        width: 100%;
+    }
+
+    @media (min-width: 640px) {
+        fieldset {
+            width: 29%;
+        }
+    }
+
+    input[type=submit] {
+        display: block;
+        margin-block-start: var(--spacing);
+    }
+    
 </style>
 
 <h1>Generator</h1>
@@ -224,7 +245,7 @@
 
 <form 
     on:submit|preventDefault={generate}
-    class="flow"
+    class="flex"
 >
     <fieldset class="border flow">
         <legend>
@@ -327,11 +348,11 @@
         </div>
     </fieldset>
     
-    <div>
-        <input
-            type="submit"
-            value="Generate">
-    </div>
+    
+    <input
+        type="submit"
+        value="Generate" />
+    
 </form>
 
 {#if scenario}

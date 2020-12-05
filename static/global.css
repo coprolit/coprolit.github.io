@@ -249,6 +249,9 @@ blockquote {
 	background-color: white;
 }
 
+fieldset {
+	margin: 0;
+}
 fieldset > legend {
 	margin-block-end: calc(var(--spacing) * -1);
 }
@@ -308,4 +311,15 @@ figure img {
 
 .grow {
 	flex-grow: 1;
+}
+
+.two-column {
+	display: grid;
+	gap: 2%;
+}
+
+@media (min-width: 640px) {
+	.two-column {
+		grid-template-columns: 25% auto /* 49% 49% */;
+	}
 }
