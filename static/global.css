@@ -17,7 +17,7 @@ body {
 	background-color: #F9F9F9;
 	margin: 0;
 	box-sizing: border-box;
-	font-family: Inter,Roboto,Oxygen,Fira Sans,Helvetica Neue,sans-serif;
+	font-family: 'Roboto', sans-serif;
 }
 
 a {
@@ -148,7 +148,7 @@ main > footer input {
 }
 .logo a {
 	font-weight: 500;
-	font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+	font-family: 'Bangers', cursive;
 	font-size: 10vw;
 	margin-block-start: 0;
 	margin-block-end: 0;
@@ -160,11 +160,11 @@ main > footer input {
 	text-decoration: none;
 }
 .logo img {
-	width: 30vw;
+	width: 25vw;
 }
 
 .tagline {
-	font-size: 3.7vw;
+	font-size: 2.9vw;
 }
 
 @media screen and (min-width: 768px) {
@@ -172,11 +172,11 @@ main > footer input {
 		font-size: 6vw;
 	}
 	.logo img {
-		width: 18vw;
+		width: 15vw;
 	}
 	
 	.tagline {
-		font-size: 2.3vw;
+		font-size: 1.8vw;
 	}
 }
 
@@ -187,7 +187,7 @@ main {
 
 blockquote {
 	display: inline-block;
-	font-family: 'Caveat', cursive;
+	font-family: 'Caveat Brush', cursive;
   font-size: x-large;
 	padding: var(--spacing);
 	color: midnightblue;

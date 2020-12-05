@@ -9,13 +9,11 @@
     </a>
     <img width="100%" src="https://cdn.shopify.com/s/files/1/0255/0949/4864/files/NEW_Bolt_Action_logo_BA_header_480x480.png">
   </div>
-  <div class="tagline">
-    <strong class="color-grey">
-      <small>
+  <div class="tagline color-grey">
+    <strong>
         <i>
           Your one stop destination for starting up a Bolt Action game.
         </i>
-      </small>
     </strong>
   </div>
 </header>
@@ -28,12 +26,12 @@
     </a>
   {/each} -->
 
-  <a href={$url('/missions')} class:active={$isActive('/missions')}>
-    Missions
+  <a href={$url()} class:active={$isActive()}>
+    Generator
   </a>
 
-  <a href={$url('/generator')} class:active={$isActive('/generator')}>
-    Generator
+  <a href={$url('/missions')} class:active={$isActive('/missions')}>
+    Missions
   </a>
 
   <a href={$url('/about')} class:active={$isActive('/about')}>
