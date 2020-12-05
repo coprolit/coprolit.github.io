@@ -163,13 +163,14 @@ main > footer input {
 }
 .logo img {
 	width: 25vw;
+	align-self: center;
 }
 
 .tagline {
 	font-size: 2.5vw;
-	font-family: monospace;
+	font-family: 'Special Elite', cursive;
 	display: inline-block;
-	padding: 1.5px 5px;
+	padding: 6px 5px 2px 5px;
 	background-color: cornsilk;
 	box-shadow: 1px 1px 3px 1px rgba(0,0,0,0.4);
 }
@@ -183,7 +184,7 @@ main > footer input {
 	}
 	
 	.tagline {
-		font-size: 1.3vw;
+		font-size: 1.5vw;
 	}
 }
 
@@ -194,8 +195,8 @@ main {
 
 blockquote {
 	display: inline-block;
-	font-family: 'Caveat Brush', cursive;
-  font-size: x-large;
+	font-family: 'Special Elite', cursive;
+  letter-spacing: .8px;
 	padding: var(--spacing);
 	color: midnightblue;
 	background-color: cornsilk;
