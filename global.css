@@ -90,9 +90,20 @@ h2 {
 }
 
 header {
-	background-image: url(https://c7.alamy.com/comp/JGXJ5F/military-or-army-camouflage-fabric-texture-pattern-background-for-JGXJ5F.jpg);
+	background-image: url(https://49fe30bb3aa7406c16dc-5c968119d095dc32d807923c59347cc2.ssl.cf1.rackcdn.com/2011.065.1092_1.jpg);
 	background-size: cover; /* Resize the background image to cover the entire container */
+  background-size: 106%;
+	background-position-x: -3vw;
+	height: 100px;
+  background-position-y: -19vw;
 }
+@media screen and (min-width: 640px) {
+	header {
+		background-position-y: -38vw;
+		height: auto;
+	}
+}
+
 /* beta ribbon */
 header:after{
   content: "alpha";
