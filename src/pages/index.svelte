@@ -233,6 +233,7 @@
     input[type=submit] {
         display: block;
         margin-block-start: var(--spacing);
+        align-self: flex-end;
     }
     
 </style>
