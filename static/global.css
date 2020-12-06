@@ -1,18 +1,18 @@
 html, body {
-	position: relative;
-	width: 100%;
-	height: 100%;
-
 	--border: 1px solid #dedede;
 	--box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.2);
 	--spacing: 12px;
 	--spacing-small: calc(var(--spacing) / 3);
 
+	--color-brand: #5b791d; /* darkolivegreen; */
+	--color-brand-light: #808000;
 	--color-gold: #FFDF00;
 	--color-accent: #EE8E4A;
+	--color-nav: #3c5013;
 }
 
 body {
+	/* position: relative; */
 	color: #333;
 	background-color: #F9F9F9;
 	margin: 0;
@@ -21,18 +21,17 @@ body {
 }
 
 a {
-	color: darkolivegreen;
+	color: var(--color-nav);
 	text-decoration: none;
 	font-weight: 500;
 }
 
 a.active {
-	color: #666;
+	color: grey;
 }
 
 a:hover {
 	text-decoration: underline;
-	/* color: #666; */
 }
 
 input, button, select, textarea {
@@ -90,17 +89,61 @@ h2 {
 }
 
 header {
+	display: flex;
+	align-items: flex-end;
+	height: 30vw;
 	background-image: url(https://49fe30bb3aa7406c16dc-5c968119d095dc32d807923c59347cc2.ssl.cf1.rackcdn.com/2011.065.1092_1.jpg);
 	background-size: cover; /* Resize the background image to cover the entire container */
   background-size: 106%;
 	background-position-x: -3vw;
-	height: 100px;
-  background-position-y: -19vw;
+	background-position-y: -38vw;
 }
 @media screen and (min-width: 640px) {
 	header {
-		background-position-y: -38vw;
-		height: auto;
+		background-position-y: -39vw;
+		height: 12vw;
+	}
+}
+
+/* Logo */
+header > div {
+	display: grid;
+	grid-template-columns: 80% 20%;
+}
+header > div > a {
+	font-weight: 500;
+	font-family: 'Bangers', cursive;
+	font-size: 13.5vw;
+	display: inline-block;
+	text-shadow: 1px 1px 2px black;
+}
+header > div > a,
+header > div > a.active,
+header > div > a:hover {
+	color: var(--color-brand);
+	text-decoration: none;
+}
+header > div > img {
+	align-self: center;
+}
+.tagline {
+	grid-column: 1 / span 2;
+	font-size: 2.8vw;
+	font-family: 'Special Elite', cursive;
+	display: inline-block;
+	padding: 6px 5px 2px 5px;
+	background-color: cornsilk;
+	box-shadow: 1px 1px 3px 1px rgba(0,0,0,0.4);
+}
+@media (min-width: 640px) {
+	header > div {
+		width: 40vw;
+	}
+	header > div > a {
+		font-size: 5.8vw;
+	}
+	.tagline {
+		font-size: 1.2vw;
 	}
 }
 
@@ -153,50 +196,6 @@ main > footer > *:first-child {
 }
 main > footer input {
 	margin: 0;
-}
-
-.logo {
-	display: flex;
-}
-.logo a {
-	font-weight: 500;
-	font-family: 'Bangers', cursive;
-	font-size: 10vw;
-	margin-block-start: 0;
-	margin-block-end: 0;
-	margin-right: 1vw;
-	display: inline-block;
-	text-shadow: 1px 1px 2px black;
-}
-.logo a, .logo a.active, .logo a.hover {
-	color: darkolivegreen;
-	text-decoration: none;
-}
-.logo img {
-	width: 25vw;
-	align-self: center;
-}
-
-.tagline {
-	font-size: 2.5vw;
-	font-family: 'Special Elite', cursive;
-	display: inline-block;
-	padding: 6px 5px 2px 5px;
-	background-color: cornsilk;
-	box-shadow: 1px 1px 3px 1px rgba(0,0,0,0.4);
-}
-
-@media screen and (min-width: 768px) {
-	.logo a {
-		font-size: 6vw;
-	}
-	.logo img {
-		width: 15vw;
-	}
-	
-	.tagline {
-		font-size: 1.5vw;
-	}
 }
 
 main {
@@ -272,7 +271,7 @@ fieldset > legend {
 	color: #808000;
 }
 .color-brand-dark {
-	color: #556b2f;
+	color: var(--color-brand); /* #556b2f; */
 }
 .color-dark {
 	color: rgba(117, 117, 117);

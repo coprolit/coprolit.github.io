@@ -7,24 +7,16 @@
     <a class="color-brand-dark" href={$url()}>
       Command Post
     </a>
-    <img width="100%" src="https://cdn.shopify.com/s/files/1/0255/0949/4864/files/NEW_Bolt_Action_logo_BA_header_480x480.png">
-  </div>
-  <div class="tagline">
-    <i>
-      Your one stop destination for starting up a Bolt Action game.
-    </i>
+    <img width="100%" src="https://www.boltaction.com/images/Bolt-Action-logo.jpg">
+    <div class="tagline">
+      <i>Your one stop destination for starting up a Bolt Action game.</i>
+    </div>
   </div>
 </header>
 
 <nav class="shadow border-bottom padding-sides">
-  <!-- {#each links as node}
-    &middot;
-    <a href={$url(node.path)} class:active={$isActive(node.path)}>
-      {node.title}
-    </a>
-  {/each} -->
 
-  <a href={$url()} class:active={$isActive()}>
+  <a href={$url('./index')} class:active={$isActive('./index')}>
     Generator
   </a>
 

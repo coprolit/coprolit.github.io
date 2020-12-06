@@ -9,6 +9,7 @@
 </svelte:head>
 
 <style  global>
+  @import "../static/reset.css";
   @import "../static/global.css";
 </style>
 
