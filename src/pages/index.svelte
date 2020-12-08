@@ -215,27 +215,25 @@
         box-shadow: 1px 1px 5px 0 rgba(0,0,0,.5);
     }
 
-    form.flex {
-        justify-content: space-around;
-        flex-wrap: wrap;
-    }
-
-    fieldset {
-        width: 100%;
-    }
-
-    @media (min-width: 640px) {
-        fieldset {
-            width: 29%;
-        }
+    form {
+        display: grid;
+        gap: var(--spacing);
     }
 
     input[type=submit] {
-        display: block;
-        margin-block-start: var(--spacing);
-        align-self: flex-end;
+        width: fit-content;
+        justify-self: center;
     }
-    
+
+    @media (min-width: 640px) {
+        form {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        input[type=submit] {
+            grid-column: span 3;
+        }
+    }
 </style>
 
 <h1>Generator</h1>
@@ -347,13 +345,11 @@
             <div class="margin-right-small">&#9432;</div>
             <div>Battlefield Conditions are gameplay modifying rules applying for both players.</div>
         </div>
-    </fieldset>
-    
+    </fieldset> 
     
     <input
         type="submit"
         value="Generate" />
-    
 </form>
 
 {#if scenario}
