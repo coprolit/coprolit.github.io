@@ -55,9 +55,11 @@
         fetch('https://www.philippesimpson.dk/mail.php', {
             method: 'post',
             body: JSON.stringify({
-                to: email1,
-                subject: "You have been assigned the mission: " + randomMission1.title,
-                message: `See your mission <a href=${randomMission1.path}>here</a>`
+                emailInput: {
+                    to: email1,
+                    subject: "You have been assigned the mission: " + randomMission1.title,
+                    message: `See your mission <a href=${randomMission1.path}>here</a>`
+                }
             })
         }).then(function(response) {
             return response.json();
