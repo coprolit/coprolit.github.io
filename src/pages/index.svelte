@@ -17,7 +17,6 @@
     let send2 = false;
 
     function getRandomInt(max) {
-        // return Math.floor(Math.random() * (max - min + 1) + min);
         return Math.floor(Math.random() * Math.floor(max));
     }
 
@@ -53,26 +52,16 @@
         const randomMission1 = missions[getRandomInt(missions.length - 1)];
         
         fetch('https://www.philippesimpson.dk/mail.php', {
-            method: 'post',
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            mode: 'no-cors', // no-cors, *cors, same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'omit', // include, *same-origin, omit
             body: JSON.stringify({
-                emailInput: {
-                    to: email1,
-                    subject: "You have been assigned the mission: " + randomMission1.title,
-                    message: `See your mission <a href=${randomMission1.path}>here</a>`
-                }
+                to: email1,
+                title: randomMission1.title,
+                path: randomMission1.path
             })
-        }).then(function(response) {
-            return response.json();
-        }).then(function(data) {
-            console.log(data);
-        });
-
-        /* Email.send({
-            SecureToken: "0b6eed09-ca2b-41ed-9283-2d33686b5dd2",
-            To: email1,
-            From: "missions@philippesimpson.dk",
-            Subject: "You have been assigned the mission: " + randomMission1.title,
-            Body: `See your mission <a href=${randomMission1.path}>here</a>`
         }).then(
             message => send1 = true
         );
@@ -80,15 +69,20 @@
         // Assign mission to player #1:
         const randomMission2 = missions[getRandomInt(missions.length - 1)];
 
-        Email.send({
-            SecureToken: "0b6eed09-ca2b-41ed-9283-2d33686b5dd2",
-            To: email2,
-            From: "missions@philippesimpson.dk",
-            Subject: "You have been assigned the mission: " + randomMission2.title,
-            Body: `See your mission <a href=${randomMission2.path}>here</a>`
+        fetch('https://www.philippesimpson.dk/mail.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            mode: 'no-cors', // no-cors, *cors, same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'omit', // include, *same-origin, omit
+            body: JSON.stringify({
+                to: email2,
+                title: randomMission2.title,
+                path: randomMission2.path
+            })
         }).then(
             message => send2 = true
-        ); */
+        );
     }
 
     function getScenario(battle, attackerDefender, baa) {
@@ -218,10 +212,6 @@
 </script>
 
 <!-- routify:options title="Generator" -->
-
-<svelte:head>
-    <script src="https://smtpjs.com/v3/smtp.js"></script>
-</svelte:head>
 
 <style>
     img {
