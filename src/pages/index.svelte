@@ -52,7 +52,20 @@
         // Assign mission to player #1:
         const randomMission1 = missions[getRandomInt(missions.length - 1)];
         
-        Email.send({
+        fetch('https://www.philippesimpson.dk/mail.php', {
+            method: 'post',
+            body: JSON.stringify({
+                to: email1,
+                subject: "You have been assigned the mission: " + randomMission1.title,
+                message: `See your mission <a href=${randomMission1.path}>here</a>`
+            })
+        }).then(function(response) {
+            return response.json();
+        }).then(function(data) {
+            console.log(data);
+        });
+
+        /* Email.send({
             SecureToken: "0b6eed09-ca2b-41ed-9283-2d33686b5dd2",
             To: email1,
             From: "missions@philippesimpson.dk",
@@ -73,7 +86,7 @@
             Body: `See your mission <a href=${randomMission2.path}>here</a>`
         }).then(
             message => send2 = true
-        );
+        ); */
     }
 
     function getScenario(battle, attackerDefender, baa) {
