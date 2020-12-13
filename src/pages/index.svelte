@@ -1,3 +1,13 @@
+<!-- routify:options title="Generator" -->
+
+<svelte:head>
+	<title>Command Post - Your one stop destination for starting up a Bolt Action game.</title>
+	<meta name="google-site-verification" content="6itfOql0q25qkV8Yr7wEi9wcfzwybFKWWcRsdg6567w" />
+	<meta name="title" content="Command Post - Your one stop destination for starting up a Bolt Action game." />
+	<meta name="description" content="A wargame tool for making it easy to choose scenario and assign missions before beginning a game of Bolt Action." />
+	<html lang="en" />
+</svelte:head>
+
 <script>
     import { metatags, layout, url } from '@roxi/routify';
     metatags.title = 'Command Post';
@@ -211,9 +221,8 @@
     }
 </script>
 
-<!-- routify:options title="Generator" -->
-
 <style>
+
     img {
         object-fit: cover;
         width: 100%;
