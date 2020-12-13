@@ -10,8 +10,8 @@
 
 <script>
     import { metatags, layout, url } from '@roxi/routify';
-    metatags.title = 'Command Post';
-    metatags.description = 'Bolt Action Scenario and Missions generator.';
+    // metatags.title = 'Command Post';
+    // metatags.description = 'Bolt Action Scenario and Missions generator.';
 
     const emailPattern = "[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$";
 
