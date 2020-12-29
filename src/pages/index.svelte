@@ -251,7 +251,18 @@
 </style>
 
 <h1>Generator</h1>
-
+<p>
+    Welcome to Bolt Action Command Post. Our objective with this tool is to add an extra tactical layer on top of the basic Bolt Action scenarios while maintaining the openness and balance of the Bolt Action game.
+</p>
+<p>
+    The point is to add a side mission for each combatant on top of the scenario focus. Side missions represent strategic level objectives that incur an effect on the options for the battlefield commander. This could be orders from further up the command chain to probe defences and report back or to hold a certain objective at all times. As such the side missions force the commander to take into account more than just a narrow focus on the scenario objectives when deciding on orders - much like a real battlefield commander would be burdoned with many conflicting goals.
+</p>
+<p>
+    Side missions have effects on the final tally of victory conditions and as such they should not be ignored - they can tip the balance and help you snatch victory from a draw or convert a defeat to a draw. 	
+</p>
+<p>
+    So choose wisely on the battlefield.
+</p>
 <p>
     Select your preferred options below and generate a random game of Bolt Action.
 </p>
