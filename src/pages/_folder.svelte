@@ -9,7 +9,7 @@
     </a>
     <img width="100%" src="https://www.boltaction.com/images/Bolt-Action-logo.jpg">
     <div class="tagline">
-      <i>Your one stop destination for starting up a Bolt Action game.</i>
+      <i>Your one stop destination for starting up a Bolt Action game - with extras.</i>
     </div>
   </div>
 </header>
