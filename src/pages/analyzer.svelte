@@ -110,10 +110,36 @@
     return Array.from(Array(item.ItemQuantity)).map(() => item);
   }
 
+  function getMobility(item: UnitItem, unit: Unit): number {
+    if (
+      unit.SectionName.includes('Infantry') ||
+      unit.SectionName.includes('Officer') ||
+      unit.SectionName.includes('Mortar') ||
+      unit.SectionName.includes('Anti-tank')
+    ) {
+      return 12;
+    }
+
+    if (
+      unit.SectionName.includes('Artillery')
+    ) {
+      return 6;
+    }
+
+    if (item.ItemMobility.includes('Wheeled')) {
+      return 24;
+    }
+    
+    if (item.ItemMobility.includes('Tracked')) {
+      return 18;
+    }
+  }
+
   function mapToModel(item: UnitItem, unit: Unit): Model[] {
+    console.log(unit)
     return {
       name: item.ItemName,
-      movement: 6,
+      movement: getMobility(item, unit),
       damageValue: 4,
       skill: unit.UnitSkill,
     }
@@ -299,17 +325,44 @@
   
     <div>
       <h3>Shots pr. turn (rate of fire)</h3>
-      <div>Total: {shots.length}</div>
-      <div>Avg. pr. weapon: {shots.length / weapons.length}</div>
-      <ul> 
-        Small-arms <li style="width: {shots.filter(shot => shot.pen === 0).length * 10}px">{shots.filter(shot => shot.pen === 0).length}</li>
-        Pen 1 <li style="width: {shots.filter(shot => shot.pen === 1).length * 10}px">{shots.filter(shot => shot.pen === 1).length}</li>
-        Pen 2 <li style="width: {shots.filter(shot => shot.pen === 2).length * 10}px">{shots.filter(shot => shot.pen === 2).length}</li>
-        Pen 3 <li style="width: {shots.filter(shot => shot.pen === 3).length * 10}px">{shots.filter(shot => shot.pen === 3).length}</li>
-        Pen 4 <li style="width: {shots.filter(shot => shot.pen === 4).length * 10}px">{shots.filter(shot => shot.pen === 4).length}</li>
-        Pen 5 <li style="width: {shots.filter(shot => shot.pen === 5).length * 10}px">{shots.filter(shot => shot.pen === 5).length}</li>
-        Pen 6 <li style="width: {shots.filter(shot => shot.pen === 6).length * 10}px">{shots.filter(shot => shot.pen === 6).length}</li>
-      </ul>
+      <div class="table">
+        <div>Total</div>
+        <div>{shots.length}</div>
+        <div></div>
+        
+        <div>Avg. pr. weapon</div>
+        <div>{(shots.length / weapons.length).toFixed(2)}</div>
+        <div></div>
+
+        <div>Small-arms</div>
+        <div>{shots.filter(shot => shot.pen === 0).length}</div>
+        <div class="bg-grey" style="width: {shots.filter(shot => shot.pen === 0).length}%"></div>
+        
+        <div>Pen 1</div>
+        <div>{shots.filter(shot => shot.pen === 1).length}</div>
+        <div class="bg-grey" style="width: {shots.filter(shot => shot.pen === 1).length}%"></div>
+        
+        <div>Pen 2</div>
+        <div>{shots.filter(shot => shot.pen === 2).length}</div>
+        <div class="bg-grey" style="width: {shots.filter(shot => shot.pen === 2).length}%"></div>
+        
+        <div>Pen 3</div>
+        <div>{shots.filter(shot => shot.pen === 3).length}</div>
+        <div class="bg-grey" style="width: {shots.filter(shot => shot.pen === 3).length}%"></div>
+        
+        <div>Pen 4</div>
+        <div>{shots.filter(shot => shot.pen === 4).length}</div>
+        <div class="bg-grey" style="width: {shots.filter(shot => shot.pen === 4).length}%"></div>
+        
+        <div>Pen 5</div>
+        <div>{shots.filter(shot => shot.pen === 5).length}</div>
+        <div class="bg-grey" style="width: {shots.filter(shot => shot.pen === 5).length}%"></div>
+        
+        <div>Pen 6</div>
+        <div>{shots.filter(shot => shot.pen === 6).length}</div>
+        <div class="bg-grey" style="width: {shots.filter(shot => shot.pen === 6).length}%"></div>
+        
+      </div>
     </div>
 
     <!-- <div class="flow">
@@ -329,35 +382,71 @@
 
     <div>
       <h3>Range</h3>
-      <ul>
-        6"
-        <li style="width: {weapons.filter(weapon => weapon.range === 6).length * 10}px">-</li>
-        12"
-        <li style="width: {weapons.filter(weapon => weapon.range === 12).length * 10}px">-</li>
-        24"
-        <li style="width: {weapons.filter(weapon => weapon.range === 24).length * 10}px">-</li>
-        36"
-        <li style="width: {weapons.filter(weapon => weapon.range === 36).length * 10}px">-</li>
-        48"
-        <li style="width: {weapons.filter(weapon => weapon.range === 48).length * 10}px">-</li>
-        60"
-        <li style="width: {weapons.filter(weapon => weapon.range === 60).length * 10}px">-</li>
-      </ul>
+      <div class="table">
+        <div>6"</div>
+        <div>{weapons.filter(weapon => weapon.range === 6).length}</div>
+        <div class="bg-grey" style="width: {weapons.filter(weapon => weapon.range === 6).length}%"></div>
+        
+        <div>12"</div>
+        <div>{weapons.filter(weapon => weapon.range === 12).length}</div>
+        <div class="bg-grey" style="width: {weapons.filter(weapon => weapon.range === 12).length}%"></div>
+        
+        <div>24"</div>
+        <div>{weapons.filter(weapon => weapon.range === 24).length}</div>
+        <div class="bg-grey" style="width: {weapons.filter(weapon => weapon.range === 24).length}%"></div>
+        
+        <div>36"</div>
+        <div>{weapons.filter(weapon => weapon.range === 36).length}</div>
+        <div class="bg-grey" style="width: {weapons.filter(weapon => weapon.range === 36).length}%"></div>
+        
+        <div>48"</div>
+        <div>{weapons.filter(weapon => weapon.range === 48).length}</div>
+        <div class="bg-grey" style="width: {weapons.filter(weapon => weapon.range === 48).length}%"></div>
+        
+        <div>60"</div>
+        <div>{weapons.filter(weapon => weapon.range === 60).length}</div>
+        <div class="bg-grey" style="width: {weapons.filter(weapon => weapon.range === 60).length}%"></div>
+      </div>
     </div>
 
     <!-- Mobility -->
     <div>
       <h3>Mobility (Run speed)</h3>
-      <ul>
-        6"
-        <li style="width: {models.filter(model => model.movement === 6).length * 10}px">-</li>
-        12"
-        <li style="width: {models.filter(model => model.movement === 12).length * 10}px">-</li>
-        18"
-        <li style="width: {models.filter(model => model.movement === 18).length * 10}px">-</li>
-        24"
-        <li style="width: {models.filter(model => model.movement === 24).length * 10}px">-</li>
-      </ul>
+      <div class="table">
+        <div>6"</div>
+        <div>{models.filter(model => model.movement === 6).length}</div>
+        <div class="bg-grey" style="width: {models.filter(model => model.movement === 6).length}%"></div>
+        
+        <div>12"</div>
+        <div>{models.filter(model => model.movement === 12).length}</div>
+        <div class="bg-grey" style="width: {models.filter(model => model.movement === 12).length}%"></div>
+        
+        <div>18"</div>
+        <div>{models.filter(model => model.movement === 18).length}</div>
+        <div class="bg-grey" style="width: {models.filter(model => model.movement === 18).length}%"></div>
+        
+        <div>24"</div>
+        <div>{models.filter(model => model.movement === 24).length}</div>
+        <div class="bg-grey" style="width: {models.filter(model => model.movement === 24).length}%"></div>
+      </div>
+    </div>
+    
+    <!-- Experiency -->
+    <div>
+      <h3>Experience</h3>
+      <div class="table">
+        <div>Inexperienced</div>
+        <div>{models.filter(model => model.skill === 'Inexperienced').length}</div>
+        <div class="bg-grey" style="width: {models.filter(model => model.skill === 'Inexperienced').length}%"></div>
+        
+        <div>Regular</div>
+        <div>{models.filter(model => model.skill === 'Regular').length}</div>
+        <div class="bg-grey" style="width: {models.filter(model => model.skill === 'Regular').length}%"></div>
+        
+        <div>Veteran</div>
+        <div>{models.filter(model => model.skill === 'Veteran').length}</div>
+        <div class="bg-grey" style="width: {models.filter(model => model.skill === 'Veteran').length}%"></div>
+      </div>
     </div>
 
   </div>
@@ -380,5 +469,11 @@
     list-style-type: none; /* Remove bullets */
     padding: 0; /* Remove padding */
     margin: 0; /* Remove margins */
+  }
+
+  .table {
+    display: grid;
+    grid-template-columns: 15% 5% 80%;
+    gap: var(--spacing-small);
   }
 </style>
