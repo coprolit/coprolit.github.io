@@ -57,24 +57,25 @@
 			method: 'GET',
 		})
 		.then(response => {
-			// if (!response.ok) {
-			//   throw new Error(response.statusText);
-			// }
+			if (!response.ok) {
+			  throw new Error(response.statusText);
+      }
+      
 			return response.json();
 		})
 		.then(response => {
       army = response;
       // From platoons flatten down to units: 
       units = response.Platoons.flatMap(platoon => platoon.Units);
-      // console.log(units)
+
       // From units flatten down to models:
       models = getModels(units);
-      console.log(models)
-      // From models
+
+      // From units (TODO from models?) flatten down to weapons:
       weapons = getWeapons(units);
-      // console.log('weapons', weapons)
+      
+      // From weapons flatten down to shots:
       shots = getShots(weapons);
-      // console.log('shots', shots)
       
 			init = false;
 		})
@@ -105,61 +106,92 @@
     return Number(range);
   }
 
-  function mapToModels(item: UnitItem): Model[] {
-    // transform quantity to items and map to model properties:
-    const models: Model[] = Array.from(Array(item.ItemQuantity)).map(() => {
-      return {
-        name: item.ItemName,
-        movement: 6,
-        damageValue: 4,
-        skill: item.UnitSkill,
-      }
-    });
+  function quantityToItems(item: UnitItem): UnitItem[] {
+    return Array.from(Array(item.ItemQuantity)).map(() => item);
+  }
 
-    return models;
+  function mapToModel(item: UnitItem, unit: Unit): Model[] {
+    return {
+      name: item.ItemName,
+      movement: 6,
+      damageValue: 4,
+      skill: unit.UnitSkill,
+    }
   }
 
   function getModelItems(unit: Unit): UnitItem[] {
-    console.log('getModelItems', unit);
-    // filter down to models only:
-    
-    // Officer:
-    if (unit.SectionName.includes('Officer')) {
+    // HQ units & Infantry:
+    if (
+      unit.SectionName.includes('Infantry') ||
+      unit.SectionName.includes('Officer')
+    ) {
+      // Filter down to UnitItems with a quantity value, and transform to Model items.
       return unit
         .UnitItems
         .filter(currentItem => !!currentItem.ItemQuantity)
+        // transform from quantity to items array:
+        .flatMap((item) => quantityToItems(item))
+        // map to Model model:
+        .map((item) => mapToModel(item, unit));
+    }
+
+    // Support & Artillery Teams: 
+    if (
+      unit.SectionName.includes('Mortar') ||
+      unit.SectionName.includes('Artillery') ||
+      unit.SectionName.includes('Anti-tank')
+    ) {
+      return unit
+        .UnitItems
+        .filter(currentItem => !!currentItem.ItemQuantity)
+        // map from team size value to quantity:
         .map(item => {
+          let men = 0;
+          
+          const isSpotter = item.ItemNotes.includes('Spotter');
+          if (isSpotter) {
+            men = 1;
+          }
+
+          // e.g. "Team (3 men), Fixed, Indirect fire, HE (2")"
+          const regex = /[0-9]/; // match a single character in the range between 0 and 9.
+          const isTeam = item.ItemNotes.search(regex);
+          
+          if (isTeam > -1) {
+            men = Number(item.ItemNotes.slice(isTeam, isTeam+1));
+          }
+          
           return {
             ...item,
-            ItemROF: 2, // assuming SMG or assault rifle.
-            ItemRange: 12, // assuming SMG.
+            ItemQuantity: men,
           };
-        });
+        })
+        // transform from quantity to items array:
+        .flatMap((item) => quantityToItems(item))
+        // map to Model model:
+        .map((item) => mapToModel(item, unit));
     }
-
-    if(unit.SectionName.includes('Infantry')) {
+ 
+    if (
+      unit.SectionName.includes('Armoured Cars') || 
+      unit.SectionName.includes('Tanks and SP Guns')
+    ) {
       return unit
         .UnitItems
-        .filter(currentItem => !!currentItem.ItemQuantity)
+        .filter(currentItem => currentItem.IsVehicle === 'true')
+        // map to Model model:
+        .map((item) => mapToModel(item, unit));
     }
 
-    /*
-    if(unit.SectionName.includes('Mortar')) {
-      return unit
-        .UnitItems
-        .filter(currentItem => !!currentItem.ItemQuantity)
-    }
-    */
-
+    // Unknown unit type
     return [];
   }
 
   function getModels(units): Model[] {
-    return units
-      // filter and flatten down to model-like unit items (an item can define multiple models, e.g. 8 infantry men):
-      .flatMap(getModelItems)
-      // transform quantities to items and map to weapon properties:
-      .flatMap(mapToModels)
+    // Each unit consists of one or more models.
+    // Flat each unit to its number of models,
+    // then flat all unit models to root level:
+    return units.flatMap(getModelItems)
   }
 
   // filter for weapon-like items:
@@ -248,68 +280,87 @@
 		<button type="submit">Submit</button>
 	</form>
   {:else}
-  <h1>
-    {army.Platoons[0].PlatoonSubName.replace(/\+/gi, ' ')}
-  </h1>
-  <div>
-    Type: {army.Platoons[0].PlatoonName}
-  </div>
-  <div>
-    Order Dice: {army.OrderDice}
-  </div>
-  <div>
-    Total Points: {army.TotalPoints}
-  </div>
+  <div class="flow">
+    <h1>
+      {army.Platoons[0].PlatoonSubName.replace(/\+/gi, ' ')}
+    </h1>
+    <div>
+      Type: {army.Platoons[0].PlatoonName}
+    </div>
+    <div>
+      Order Dice: {army.OrderDice}
+    </div>
+    <div>
+      Total Points: {army.TotalPoints}
+    </div>
+    <div>
+      Model count (bodies): {models.length}
+    </div>
   
-  <div class="flow">
-    <h3>Shots pr. turn (rate of fire)</h3>
-    <div>Total: {shots.length}</div>
-    <div>Avg. pr. weapon: {shots.length / weapons.length}</div>
-    <ul> 
-      Small-arms <li style="width: {shots.filter(shot => shot.pen === 0).length * 10}px">{shots.filter(shot => shot.pen === 0).length}</li>
-      Pen 1 <li style="width: {shots.filter(shot => shot.pen === 1).length * 10}px">{shots.filter(shot => shot.pen === 1).length}</li>
-      Pen 2 <li style="width: {shots.filter(shot => shot.pen === 2).length * 10}px">{shots.filter(shot => shot.pen === 2).length}</li>
-      Pen 3 <li style="width: {shots.filter(shot => shot.pen === 3).length * 10}px">{shots.filter(shot => shot.pen === 3).length}</li>
-      Pen 4 <li style="width: {shots.filter(shot => shot.pen === 4).length * 10}px">{shots.filter(shot => shot.pen === 4).length}</li>
-      Pen 5 <li style="width: {shots.filter(shot => shot.pen === 5).length * 10}px">{shots.filter(shot => shot.pen === 5).length}</li>
-      Pen 6 <li style="width: {shots.filter(shot => shot.pen === 6).length * 10}px">{shots.filter(shot => shot.pen === 6).length}</li>
-    </ul>
+    <div>
+      <h3>Shots pr. turn (rate of fire)</h3>
+      <div>Total: {shots.length}</div>
+      <div>Avg. pr. weapon: {shots.length / weapons.length}</div>
+      <ul> 
+        Small-arms <li style="width: {shots.filter(shot => shot.pen === 0).length * 10}px">{shots.filter(shot => shot.pen === 0).length}</li>
+        Pen 1 <li style="width: {shots.filter(shot => shot.pen === 1).length * 10}px">{shots.filter(shot => shot.pen === 1).length}</li>
+        Pen 2 <li style="width: {shots.filter(shot => shot.pen === 2).length * 10}px">{shots.filter(shot => shot.pen === 2).length}</li>
+        Pen 3 <li style="width: {shots.filter(shot => shot.pen === 3).length * 10}px">{shots.filter(shot => shot.pen === 3).length}</li>
+        Pen 4 <li style="width: {shots.filter(shot => shot.pen === 4).length * 10}px">{shots.filter(shot => shot.pen === 4).length}</li>
+        Pen 5 <li style="width: {shots.filter(shot => shot.pen === 5).length * 10}px">{shots.filter(shot => shot.pen === 5).length}</li>
+        Pen 6 <li style="width: {shots.filter(shot => shot.pen === 6).length * 10}px">{shots.filter(shot => shot.pen === 6).length}</li>
+      </ul>
+    </div>
+
+    <!-- <div class="flow">
+      <h3>Penetration</h3>
+      <ul> 
+        <li style="width: {weaponsByPen(weapons, 0).length * 10}px">0 (Small-arms)</li>
+        <li style="width: {weaponsByPen(weapons, 1).length * 10}px">1</li>
+        <li style="width: {weaponsByPen(weapons, 2).length * 10}px">2</li>
+        <li style="width: {weaponsByPen(weapons, 3).length * 10}px">3</li>
+        <li style="width: {weaponsByPen(weapons, 4).length * 10}px">4</li>
+        <li style="width: {weaponsByPen(weapons, 5).length * 10}px">6</li>
+        <li style="width: {weaponsByPen(weapons, 6).length * 10}px">5</li>
+        <li style="width: {weaponsByPen(weapons, 7).length * 10}px">7</li>
+        <li style="width: {weaponsByPen(weapons, 8).length * 10}px">8</li>
+      </ul>
+    </div> -->
+
+    <div>
+      <h3>Range</h3>
+      <ul>
+        6"
+        <li style="width: {weapons.filter(weapon => weapon.range === 6).length * 10}px">-</li>
+        12"
+        <li style="width: {weapons.filter(weapon => weapon.range === 12).length * 10}px">-</li>
+        24"
+        <li style="width: {weapons.filter(weapon => weapon.range === 24).length * 10}px">-</li>
+        36"
+        <li style="width: {weapons.filter(weapon => weapon.range === 36).length * 10}px">-</li>
+        48"
+        <li style="width: {weapons.filter(weapon => weapon.range === 48).length * 10}px">-</li>
+        60"
+        <li style="width: {weapons.filter(weapon => weapon.range === 60).length * 10}px">-</li>
+      </ul>
+    </div>
+
+    <!-- Mobility -->
+    <div>
+      <h3>Mobility (Run speed)</h3>
+      <ul>
+        6"
+        <li style="width: {models.filter(model => model.movement === 6).length * 10}px">-</li>
+        12"
+        <li style="width: {models.filter(model => model.movement === 12).length * 10}px">-</li>
+        18"
+        <li style="width: {models.filter(model => model.movement === 18).length * 10}px">-</li>
+        24"
+        <li style="width: {models.filter(model => model.movement === 24).length * 10}px">-</li>
+      </ul>
+    </div>
+
   </div>
-
-  <!-- <div class="flow">
-    <h3>Penetration</h3>
-    <ul> 
-      <li style="width: {weaponsByPen(weapons, 0).length * 10}px">0 (Small-arms)</li>
-      <li style="width: {weaponsByPen(weapons, 1).length * 10}px">1</li>
-      <li style="width: {weaponsByPen(weapons, 2).length * 10}px">2</li>
-      <li style="width: {weaponsByPen(weapons, 3).length * 10}px">3</li>
-      <li style="width: {weaponsByPen(weapons, 4).length * 10}px">4</li>
-      <li style="width: {weaponsByPen(weapons, 5).length * 10}px">6</li>
-      <li style="width: {weaponsByPen(weapons, 6).length * 10}px">5</li>
-      <li style="width: {weaponsByPen(weapons, 7).length * 10}px">7</li>
-      <li style="width: {weaponsByPen(weapons, 8).length * 10}px">8</li>
-    </ul>
-  </div> -->
-
-  <div class="flow">
-    <h3>Range</h3>
-    <ul>
-      6"
-      <li style="width: {weapons.filter(weapon => weapon.range === 6).length * 10}px">-</li>
-      12"
-      <li style="width: {weapons.filter(weapon => weapon.range === 12).length * 10}px">-</li>
-      24"
-      <li style="width: {weapons.filter(weapon => weapon.range === 24).length * 10}px">-</li>
-      36"
-      <li style="width: {weapons.filter(weapon => weapon.range === 36).length * 10}px">-</li>
-      48"
-      <li style="width: {weapons.filter(weapon => weapon.range === 48).length * 10}px">-</li>
-      60"
-      <li style="width: {weapons.filter(weapon => weapon.range === 60).length * 10}px">-</li>
-    </ul>
-  </div>
-
-  <!-- Mobility -->
 
 	{/if}
 </main>
