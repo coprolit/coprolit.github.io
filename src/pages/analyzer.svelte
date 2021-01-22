@@ -9,7 +9,9 @@
 
 	interface Unit {
     SectionName: string;
-    UnitItems: UnitItem[]
+    UnitItems: UnitItem[];
+    UnitSkill: 'Inexperienced' | 'Regular' | 'Veteran';
+    movement: number;
   }
 
   interface UnitItem {
@@ -110,7 +112,7 @@
     return Array.from(Array(item.ItemQuantity)).map(() => item);
   }
 
-  function getMobility(item: UnitItem, unit: Unit): number {
+  function getMobility(unit: Unit): number {
     if (
       unit.SectionName.includes('Infantry') ||
       unit.SectionName.includes('Officer') ||
@@ -125,22 +127,45 @@
     ) {
       return 6;
     }
-
-    if (item.ItemMobility.includes('Wheeled')) {
+    
+    if (unit.UnitItems[0].ItemMobility.includes('Wheeled')) {
       return 24;
     }
     
-    if (item.ItemMobility.includes('Tracked')) {
+    if (unit.UnitItems[0].ItemMobility.includes('Tracked')) {
       return 18;
+    }
+  }
+  
+  function getDamageValue(unit: Unit): number {
+    
+    if (
+      unit.SectionName.includes('Infantry') ||
+      unit.SectionName.includes('Officer') ||
+      unit.SectionName.includes('Mortar') ||
+      unit.SectionName.includes('Anti-tank') ||
+      unit.SectionName.includes('Artillery')
+    ) {
+      if (unit.UnitSkill === 'Inexperienced') return 3;
+      if (unit.UnitSkill === 'Regular') return 4;
+      if (unit.UnitSkill === 'Veteran') return 5;
+      
+      return 4;
+    }
+    
+    if (
+      unit.SectionName.includes('Armoured Cars') || 
+      unit.SectionName.includes('Tanks and SP Guns')
+    ) {
+      return Number(unit.UnitItems[0].ItemDamageValue.slice(0, -1));
     }
   }
 
   function mapToModel(item: UnitItem, unit: Unit): Model[] {
-    console.log(unit)
     return {
       name: item.ItemName,
-      movement: getMobility(item, unit),
-      damageValue: 4,
+      movement: getMobility(unit),
+      damageValue: getDamageValue(unit),
       skill: unit.UnitSkill,
     }
   }
@@ -365,23 +390,9 @@
       </div>
     </div>
 
-    <!-- <div class="flow">
-      <h3>Penetration</h3>
-      <ul> 
-        <li style="width: {weaponsByPen(weapons, 0).length * 10}px">0 (Small-arms)</li>
-        <li style="width: {weaponsByPen(weapons, 1).length * 10}px">1</li>
-        <li style="width: {weaponsByPen(weapons, 2).length * 10}px">2</li>
-        <li style="width: {weaponsByPen(weapons, 3).length * 10}px">3</li>
-        <li style="width: {weaponsByPen(weapons, 4).length * 10}px">4</li>
-        <li style="width: {weaponsByPen(weapons, 5).length * 10}px">6</li>
-        <li style="width: {weaponsByPen(weapons, 6).length * 10}px">5</li>
-        <li style="width: {weaponsByPen(weapons, 7).length * 10}px">7</li>
-        <li style="width: {weaponsByPen(weapons, 8).length * 10}px">8</li>
-      </ul>
-    </div> -->
-
+    <!-- Weapons range -->
     <div>
-      <h3>Range</h3>
+      <h3>Weapons Range</h3>
       <div class="table">
         <div>6"</div>
         <div>{weapons.filter(weapon => weapon.range === 6).length}</div>
@@ -411,41 +422,76 @@
 
     <!-- Mobility -->
     <div>
-      <h3>Mobility (Run speed)</h3>
+      <h3>Units Mobility (Run speed)</h3>
       <div class="table">
         <div>6"</div>
-        <div>{models.filter(model => model.movement === 6).length}</div>
-        <div class="bg-grey" style="width: {models.filter(model => model.movement === 6).length}%"></div>
+        <div>{units.filter(unit => getMobility(unit) === 6).length}</div>
+        <div class="bg-grey" style="width: {units.filter(unit => getMobility(unit) === 6).length}%"></div>
         
         <div>12"</div>
-        <div>{models.filter(model => model.movement === 12).length}</div>
-        <div class="bg-grey" style="width: {models.filter(model => model.movement === 12).length}%"></div>
+        <div>{units.filter(unit => getMobility(unit) === 12).length}</div>
+        <div class="bg-grey" style="width: {units.filter(unit => getMobility(unit) === 12).length}%"></div>
         
         <div>18"</div>
-        <div>{models.filter(model => model.movement === 18).length}</div>
-        <div class="bg-grey" style="width: {models.filter(model => model.movement === 18).length}%"></div>
+        <div>{units.filter(unit => getMobility(unit) === 18).length}</div>
+        <div class="bg-grey" style="width: {units.filter(unit => getMobility(unit) === 18).length}%"></div>
         
         <div>24"</div>
-        <div>{models.filter(model => model.movement === 24).length}</div>
-        <div class="bg-grey" style="width: {models.filter(model => model.movement === 24).length}%"></div>
+        <div>{units.filter(unit => getMobility(unit) === 24).length}</div>
+        <div class="bg-grey" style="width: {units.filter(unit => getMobility(unit) === 24).length}%"></div>
+      </div>
+    </div>
+    
+    <!-- Units Damage Values -->
+    <div>
+      <h3>Units Damage Value</h3>
+      <div class="table">
+        <div>3</div>
+        <div>{units.filter(unit => getDamageValue(unit) === 3).length}</div>
+        <div class="bg-grey" style="width: {units.filter(unit => getDamageValue(unit) === 3).length}%"></div>
+        
+        <div>4</div>
+        <div>{units.filter(unit => getDamageValue(unit) === 4).length}</div>
+        <div class="bg-grey" style="width: {units.filter(unit => getDamageValue(unit) === 4).length}%"></div>
+        
+        <div>5</div>
+        <div>{units.filter(unit => getDamageValue(unit) === 5).length}</div>
+        <div class="bg-grey" style="width: {units.filter(unit => getDamageValue(unit) === 5).length}%"></div>
+        
+        <div>6</div>
+        <div>{units.filter(unit => getDamageValue(unit) === 6).length}</div>
+        <div class="bg-grey" style="width: {units.filter(unit => getDamageValue(unit) === 6).length}%"></div>
+        
+        <div>7</div>
+        <div>{units.filter(unit => getDamageValue(unit) === 7).length}</div>
+        <div class="bg-grey" style="width: {units.filter(unit => getDamageValue(unit) === 7).length}%"></div>
+        
+        <div>8</div>
+        <div>{units.filter(unit => getDamageValue(unit) === 8).length}</div>
+        <div class="bg-grey" style="width: {units.filter(unit => getDamageValue(unit) === 8).length}%"></div>
+        
+        <div>9</div>
+        <div>{units.filter(unit => getDamageValue(unit) === 9).length}</div>
+        <div class="bg-grey" style="width: {units.filter(unit => getDamageValue(unit) === 9).length}%"></div>
+        
       </div>
     </div>
     
     <!-- Experiency -->
     <div>
-      <h3>Experience</h3>
+      <h3>Units Experience</h3>
       <div class="table">
         <div>Inexperienced</div>
-        <div>{models.filter(model => model.skill === 'Inexperienced').length}</div>
-        <div class="bg-grey" style="width: {models.filter(model => model.skill === 'Inexperienced').length}%"></div>
+        <div>{units.filter(unit => unit.UnitSkill === 'Inexperienced').length}</div>
+        <div class="bg-grey" style="width: {units.filter(unit => unit.UnitSkill === 'Inexperienced').length}%"></div>
         
         <div>Regular</div>
-        <div>{models.filter(model => model.skill === 'Regular').length}</div>
-        <div class="bg-grey" style="width: {models.filter(model => model.skill === 'Regular').length}%"></div>
+        <div>{units.filter(unit => unit.UnitSkill === 'Regular').length}</div>
+        <div class="bg-grey" style="width: {units.filter(unit => unit.UnitSkill === 'Regular').length}%"></div>
         
         <div>Veteran</div>
-        <div>{models.filter(model => model.skill === 'Veteran').length}</div>
-        <div class="bg-grey" style="width: {models.filter(model => model.skill === 'Veteran').length}%"></div>
+        <div>{units.filter(unit => unit.UnitSkill === 'Veteran').length}</div>
+        <div class="bg-grey" style="width: {units.filter(unit => unit.UnitSkill === 'Veteran').length}%"></div>
       </div>
     </div>
 
