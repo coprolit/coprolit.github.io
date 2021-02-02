@@ -334,3 +334,13 @@ figure img {
 		grid-template-columns: 25% auto /* 49% 49% */;
 	}
 }
+
+.is-half {
+	width: 50%;
+}
+.is-one-third {
+	width: 33%;
+}
+.is-one-quarter {
+	width: 25%;
+}

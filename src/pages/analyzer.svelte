@@ -1,10 +1,13 @@
 <script lang='ts'>
+  import { onMount } from 'svelte';
+
   interface Army {
 		id: number;
 		name: string;
 		PlatoonName: string;
 		PlatoonSubName: string;
-		Units: Unit[];
+    Units: Unit[];
+    OrderDice: number;
 	}
 
 	interface Unit {
@@ -42,6 +45,34 @@
     range: number;
   }
 
+  interface Weapon {
+    pen: number;
+    rof: number;
+    range: number;
+  }
+  interface Model {
+    damageValue: number;
+    name: string; // e.g. "Second (Junior) Lieutenant"
+    weapons: Weapon[];
+  }
+  interface Unit {
+    SectionName: string; // e.g. "Officer"
+    UnitName: string; // e.g. "Junior Lieutenant"
+    UnitSkill: 'Inexperienced' | 'Regular' | 'Veteran';
+    models: Models[];
+    movement: number;
+  }
+  interface Platoon {
+    PlatoonName: string;
+    PlatoonSubName: string;
+    Units: Unit[];
+  }
+  interface Army {
+    Platoons: Platoon[]
+    OrderDice: number;
+    TotalPoints: number;
+  }
+
   let init = true;
 
   let army: Army;
@@ -51,24 +82,25 @@
   let shots: Shots[];
   let penetration: number[];
   
-  function importArmy(event: any): void {
+  async function importArmy(event: any): void {
 		const formData = new FormData(event.target);
 		const url = formData.get('url');
-		
-		fetch('http://www.philippesimpson.dk/armylist.php?url=' + url, {
-			method: 'GET',
-		})
-		.then(response => {
-			if (!response.ok) {
+    
+    try {
+      const response = await fetch('http://www.philippesimpson.dk/armylist.php?url=' + url, {
+        method: 'GET',
+      });
+      
+      if (!response.ok) {
 			  throw new Error(response.statusText);
       }
-      
-			return response.json();
-		})
-		.then(response => {
-      army = response;
+
+      const result = await response.json();
+
+      army = result;
+      console.log('army', army)
       // From platoons flatten down to units: 
-      units = response.Platoons.flatMap(platoon => platoon.Units);
+      units = result.Platoons.flatMap(platoon => platoon.Units);
 
       // From units flatten down to models:
       models = getModels(units);
@@ -78,12 +110,47 @@
       
       // From weapons flatten down to shots:
       shots = getShots(weapons);
+
+      init = false;
+
+      const army2 = mapArmy(result);
+      console.log(army2);
+    } catch (error) {
+      throw error;
+    };
+  }
+
+  function mapArmy(army: Army) {
+    const { OrderDice, TotalPoints } = army;
+
+    const Platoons = army.Platoons.map(platoon => {
+      const { PlatoonName, PlatoonSubName } = platoon;
       
-			init = false;
-		})
-		.catch(error => {
-			console.error('There has been a problem with your fetch operation:', error);
+      const Units = platoon.Units.map(unit => {
+        const { SectionName, UnitSkill, UnitName } = unit;
+
+        return {
+          UnitName,
+          SectionName,
+          UnitSkill,
+          damageValue: getDamageValue(unit),
+          movement: getMobility(unit),
+          models: getModelItems(unit)
+        }
+      })
+
+      return {
+        PlatoonName,
+        PlatoonSubName,
+        Units,
+      }
     });
+
+    return {
+      OrderDice,
+      TotalPoints,
+      Platoons
+    }
   }
 
   function getPen(item: UnitItem): number {
@@ -100,12 +167,25 @@
   }
 
   function getRange(range: string): number {
+    console.log('getRange', range, Number(range), typeof range === 'string')
+    // Expected value format: 12, 12", 12"-60", or 60"(30-72).
+
     if(typeof range === 'string') {
-      // Expected value format: 12, 12", 12"-60", or 60"(30-72).
+      if(range.length === 0) {
+        // if value === " ", assume an SMG.
+        return 12;
+      }
+      // Expected value format: 12", 12"-60", or 60"(30-72).  
       return Number( range.slice(-3, -1) );
     }
 
-    return Number(range);
+    // Expected value format: 12.
+    return Number(range) || 12;
+  }
+
+  function getROF(itemROF: string): number {
+    // if value === " ", assume an SMG.
+    return Number(itemROF) || 2;
   }
 
   function quantityToItems(item: UnitItem): UnitItem[] {
@@ -162,15 +242,25 @@
   }
 
   function mapToModel(item: UnitItem, unit: Unit): Model[] {
+    // console.log('mapToModel()', item)
     return {
       name: item.ItemName,
-      movement: getMobility(unit),
-      damageValue: getDamageValue(unit),
-      skill: unit.UnitSkill,
+      weapons: getWeapons2(item)
+    }
+  }
+
+  function toCrewModels(item: UnitItem, unit: Unit): Model[] {
+    return {
+      name: item.ItemName,
+      weapons: getWeapons2(item)
     }
   }
 
   function getModelItems(unit: Unit): UnitItem[] {
+    // UnitItems:
+    // An array containing nodes of each type of weapon in unit, and of any unit abilities.
+    // Each weapon-type node defines the quantity of the weapon type.
+    
     // HQ units & Infantry:
     if (
       unit.SectionName.includes('Infantry') ||
@@ -180,7 +270,9 @@
       return unit
         .UnitItems
         .filter(currentItem => !!currentItem.ItemQuantity)
-        // transform from quantity to items array:
+        // For each UnitItem type array:
+        // - transform from quantity to items array (an item for each weapon/model)
+        // - then flatten
         .flatMap((item) => quantityToItems(item))
         // map to Model model:
         .map((item) => mapToModel(item, unit));
@@ -217,19 +309,36 @@
             ItemQuantity: men,
           };
         })
+        .map(item => toCrewModels)
         // transform from quantity to items array:
-        .flatMap((item) => quantityToItems(item))
+        // .flatMap((item) => quantityToItems(item))
         // map to Model model:
-        .map((item) => mapToModel(item, unit));
+        // .map((item) => mapToModel(item, unit));
     }
  
     if (
       unit.SectionName.includes('Armoured Cars') || 
       unit.SectionName.includes('Tanks and SP Guns')
     ) {
+      /* const weapons = unit
+        .UnitItems
+        .filter(item => !!item.IsGun)
+        .map(weapon => {
+          return {
+            pen: getPen(weapon),
+            rof: Number(weapon.ItemROF) || 1,
+            range: getRange(weapon.ItemRange),
+          }
+        })
+
+      return [{
+        damageValue: getDamageValue(unit),
+        weapons
+      }] */
       return unit
         .UnitItems
-        .filter(currentItem => currentItem.IsVehicle === 'true')
+        .filter(currentItem => !!currentItem.ItemQuantity)
+        .flatMap((item) => quantityToItems(item))
         // map to Model model:
         .map((item) => mapToModel(item, unit));
     }
@@ -257,7 +366,7 @@
         .map(item => {
           return {
             ...item,
-            ItemROF: 2, // assuming SMG or assault rifle.
+            ItemROF: 2, // assuming SMG or assault rifle. 
             ItemRange: 12, // assuming SMG.
           };
         });
@@ -295,6 +404,15 @@
     return weapons;
   }
 
+  function getWeapons2(item: UnitItem): Weapon[] {
+    // console.log('getWeapons2()', item);
+    return [{
+      pen: getPen(item),
+      rof: getROF(item.ItemROF),
+      range: getRange(item.ItemRange),
+    }]
+  }
+
   function getWeapons(units: Unit[], type: 's'|'h'): Weapon[] {
     return units
       // filter and flatten down to weapon-like unit items (an item can define multiple weapons, e.g. 8 rifles):
@@ -323,7 +441,6 @@
   }
 </script>
 
-<main>
 	{#if init}
 	<form on:submit|preventDefault={importArmy}>
 		<label for='url'>Import army:</label>
@@ -348,82 +465,38 @@
       Model count (bodies): {models.length}
     </div>
   
+    <!-- Shots pr. turn -->
     <div>
       <h3>Shots pr. turn (rate of fire)</h3>
       <div class="table">
-        <div>Total</div>
+        <div>Total number of Shots</div>
         <div>{shots.length}</div>
         <div></div>
         
-        <div>Avg. pr. weapon</div>
+        <div>Avg. shots pr. weapon</div>
         <div>{(shots.length / weapons.length).toFixed(2)}</div>
         <div></div>
-
-        <div>Small-arms</div>
-        <div>{shots.filter(shot => shot.pen === 0).length}</div>
-        <div class="bg-grey" style="width: {shots.filter(shot => shot.pen === 0).length}%"></div>
-        
-        <div>Pen 1</div>
-        <div>{shots.filter(shot => shot.pen === 1).length}</div>
-        <div class="bg-grey" style="width: {shots.filter(shot => shot.pen === 1).length}%"></div>
-        
-        <div>Pen 2</div>
-        <div>{shots.filter(shot => shot.pen === 2).length}</div>
-        <div class="bg-grey" style="width: {shots.filter(shot => shot.pen === 2).length}%"></div>
-        
-        <div>Pen 3</div>
-        <div>{shots.filter(shot => shot.pen === 3).length}</div>
-        <div class="bg-grey" style="width: {shots.filter(shot => shot.pen === 3).length}%"></div>
-        
-        <div>Pen 4</div>
-        <div>{shots.filter(shot => shot.pen === 4).length}</div>
-        <div class="bg-grey" style="width: {shots.filter(shot => shot.pen === 4).length}%"></div>
-        
-        <div>Pen 5</div>
-        <div>{shots.filter(shot => shot.pen === 5).length}</div>
-        <div class="bg-grey" style="width: {shots.filter(shot => shot.pen === 5).length}%"></div>
-        
-        <div>Pen 6</div>
-        <div>{shots.filter(shot => shot.pen === 6).length}</div>
-        <div class="bg-grey" style="width: {shots.filter(shot => shot.pen === 6).length}%"></div>
-        
       </div>
     </div>
 
     <!-- Weapons range -->
     <div>
-      <h3>Weapons Range</h3>
+      <h3>Weapons Range distribution</h3>
       <div class="table">
-        <div>6"</div>
-        <div>{weapons.filter(weapon => weapon.range === 6).length}</div>
-        <div class="bg-grey" style="width: {weapons.filter(weapon => weapon.range === 6).length}%"></div>
-        
-        <div>12"</div>
-        <div>{weapons.filter(weapon => weapon.range === 12).length}</div>
-        <div class="bg-grey" style="width: {weapons.filter(weapon => weapon.range === 12).length}%"></div>
-        
-        <div>24"</div>
-        <div>{weapons.filter(weapon => weapon.range === 24).length}</div>
-        <div class="bg-grey" style="width: {weapons.filter(weapon => weapon.range === 24).length}%"></div>
-        
-        <div>36"</div>
-        <div>{weapons.filter(weapon => weapon.range === 36).length}</div>
-        <div class="bg-grey" style="width: {weapons.filter(weapon => weapon.range === 36).length}%"></div>
-        
-        <div>48"</div>
-        <div>{weapons.filter(weapon => weapon.range === 48).length}</div>
-        <div class="bg-grey" style="width: {weapons.filter(weapon => weapon.range === 48).length}%"></div>
-        
-        <div>60"</div>
-        <div>{weapons.filter(weapon => weapon.range === 60).length}</div>
-        <div class="bg-grey" style="width: {weapons.filter(weapon => weapon.range === 60).length}%"></div>
+        <div>Number of Weapons</div>
+        <div>{weapons.length}</div>
+        <div></div>
       </div>
     </div>
 
     <!-- Mobility -->
     <div>
-      <h3>Units Mobility (Run speed)</h3>
+      <h3>Units Mobility (Run speed) distribution</h3>
       <div class="table">
+        <div>Total number of Units</div>
+        <div>{units.length}</div>
+        <div></div>
+        
         <div>6"</div>
         <div>{units.filter(unit => getMobility(unit) === 6).length}</div>
         <div class="bg-grey" style="width: {units.filter(unit => getMobility(unit) === 6).length}%"></div>
@@ -444,8 +517,12 @@
     
     <!-- Units Damage Values -->
     <div>
-      <h3>Units Damage Value</h3>
+      <h3>Units Damage Value distribution</h3>
       <div class="table">
+        <div>Total number of Units</div>
+        <div>{units.length}</div>
+        <div></div>
+
         <div>3</div>
         <div>{units.filter(unit => getDamageValue(unit) === 3).length}</div>
         <div class="bg-grey" style="width: {units.filter(unit => getDamageValue(unit) === 3).length}%"></div>
@@ -479,26 +556,21 @@
     
     <!-- Experiency -->
     <div>
-      <h3>Units Experience</h3>
+      <h3>Units Experience distribution</h3>
       <div class="table">
-        <div>Inexperienced</div>
-        <div>{units.filter(unit => unit.UnitSkill === 'Inexperienced').length}</div>
-        <div class="bg-grey" style="width: {units.filter(unit => unit.UnitSkill === 'Inexperienced').length}%"></div>
-        
-        <div>Regular</div>
-        <div>{units.filter(unit => unit.UnitSkill === 'Regular').length}</div>
-        <div class="bg-grey" style="width: {units.filter(unit => unit.UnitSkill === 'Regular').length}%"></div>
-        
-        <div>Veteran</div>
-        <div>{units.filter(unit => unit.UnitSkill === 'Veteran').length}</div>
-        <div class="bg-grey" style="width: {units.filter(unit => unit.UnitSkill === 'Veteran').length}%"></div>
+        <div>Total number of Units</div>
+        <div>{units.length}</div>
+        <div></div>
+      </div>
+      <div class="is-half">
+        <canvas id="expChart"></canvas>
       </div>
     </div>
 
   </div>
 
 	{/if}
-</main>
+
 
 <style>
   table {
