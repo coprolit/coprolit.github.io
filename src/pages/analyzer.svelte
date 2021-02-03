@@ -1,42 +1,12 @@
 <script lang='ts'>
   import { onMount } from 'svelte';
 
-  interface Army {
-		id: number;
-		name: string;
-		PlatoonName: string;
-		PlatoonSubName: string;
-    Units: Unit[];
-    OrderDice: number;
-	}
-
-	interface Unit {
-    SectionName: string;
-    UnitItems: UnitItem[];
-    UnitSkill: 'Inexperienced' | 'Regular' | 'Veteran';
-    movement: number;
-  }
-
   interface UnitItem {
     IsVehicle: 'false' | 'true';
     ItemName: string;
     ItemPEN: 'HE' | ' ' | 'n/a' | '+1'
     ItemQuantity: number;
     ItemROF: string;
-  }
-
-  interface Model {
-    name: string;
-    movement: number;
-    damageValue: number;
-    skill: 'Inexperienced' | 'Regular' | 'Veteran';
-  }
-
-  interface Weapon {
-    name: string;
-    pen: number;
-    rof: number;
-    range: number;
   }
   
   interface Shot {
@@ -59,7 +29,7 @@
     SectionName: string; // e.g. "Officer"
     UnitName: string; // e.g. "Junior Lieutenant"
     UnitSkill: 'Inexperienced' | 'Regular' | 'Veteran';
-    models: Models[];
+    models: Model[];
     movement: number;
   }
   interface Platoon {
@@ -97,19 +67,19 @@
 
       const result = await response.json();
 
-      army = result;
-      console.log('army', army)
-      // From platoons flatten down to units: 
-      units = result.Platoons.flatMap(platoon => platoon.Units);
+      // army = result;
+      console.log('result', result)
+      // // From platoons flatten down to units: 
+      // units = result.Platoons.flatMap(platoon => platoon.Units);
 
-      // From units flatten down to models:
-      models = getModels(units);
+      // // From units flatten down to models:
+      // models = getModels(units);
 
-      // From units (TODO from models?) flatten down to weapons:
-      weapons = getWeapons(units);
+      // // From units (TODO from models?) flatten down to weapons:
+      // weapons = getWeapons(units);
       
-      // From weapons flatten down to shots:
-      shots = getShots(weapons);
+      // // From weapons flatten down to shots:
+      // shots = getShots(weapons);
 
       init = false;
 
@@ -167,7 +137,7 @@
   }
 
   function getRange(range: string): number {
-    console.log('getRange', range, Number(range), typeof range === 'string')
+    // console.log('getRange', range, Number(range), typeof range === 'string')
     // Expected value format: 12, 12", 12"-60", or 60"(30-72).
 
     if(typeof range === 'string') {
@@ -184,8 +154,22 @@
   }
 
   function getROF(itemROF: string): number {
+    
+    if (Number(itemROF)) {
+      return Number(itemROF);
+    }
+
+    // if value === "D6", assume an flamethrower.
+    if (itemROF.includes('D6')) {
+      return 1;
+    }
+    // if value === "-", assume 'equipped as modelled', so an SMG.
+    if (itemROF.includes('-')) {
+      return 2;
+    }
+
     // if value === " ", assume an SMG.
-    return Number(itemROF) || 2;
+    return 2;
   }
 
   function quantityToItems(item: UnitItem): UnitItem[] {
@@ -215,6 +199,8 @@
     if (unit.UnitItems[0].ItemMobility.includes('Tracked')) {
       return 18;
     }
+
+    return 0;
   }
   
   function getDamageValue(unit: Unit): number {
@@ -237,6 +223,7 @@
       unit.SectionName.includes('Armoured Cars') || 
       unit.SectionName.includes('Tanks and SP Guns')
     ) {
+      // e.g. "9+"
       return Number(unit.UnitItems[0].ItemDamageValue.slice(0, -1));
     }
   }
@@ -245,14 +232,15 @@
     // console.log('mapToModel()', item)
     return {
       name: item.ItemName,
-      weapons: getWeapons2(item)
+      weapons: [getWeapon(item)]
     }
   }
 
-  function toCrewModels(item: UnitItem, unit: Unit): Model[] {
+  function toCrewModels(item: UnitItem, index: number): Model[] {
+    // Attach crew weapon to first soldier, rest of crew is unarmed. 
     return {
       name: item.ItemName,
-      weapons: getWeapons2(item)
+      weapons: index === 0 ? [getWeapon(item)] : []
     }
   }
 
@@ -309,10 +297,10 @@
             ItemQuantity: men,
           };
         })
-        .map(item => toCrewModels)
         // transform from quantity to items array:
-        // .flatMap((item) => quantityToItems(item))
+        .flatMap((item) => quantityToItems(item))
         // map to Model model:
+        .map(toCrewModels)
         // .map((item) => mapToModel(item, unit));
     }
  
@@ -320,27 +308,18 @@
       unit.SectionName.includes('Armoured Cars') || 
       unit.SectionName.includes('Tanks and SP Guns')
     ) {
-      /* const weapons = unit
-        .UnitItems
-        .filter(item => !!item.IsGun)
-        .map(weapon => {
-          return {
-            pen: getPen(weapon),
-            rof: Number(weapon.ItemROF) || 1,
-            range: getRange(weapon.ItemRange),
-          }
-        })
-
-      return [{
-        damageValue: getDamageValue(unit),
-        weapons
-      }] */
       return unit
         .UnitItems
-        .filter(currentItem => !!currentItem.ItemQuantity)
-        .flatMap((item) => quantityToItems(item))
-        // map to Model model:
-        .map((item) => mapToModel(item, unit));
+        .filter(currentItem => currentItem.IsVehicle === 'true')
+        // for each vehicle model get its associated/mounted weapons:
+        .map(vehicle => {
+          const weapons = unit.UnitItems.filter(item => item.IsGun === 'true' && (item.ItemLine === vehicle.ItemLine))
+          
+          return {
+            name: vehicle.ItemName,
+            weapons: weapons.flatMap(getWeapon)
+          }
+        })
     }
 
     // Unknown unit type
@@ -404,13 +383,13 @@
     return weapons;
   }
 
-  function getWeapons2(item: UnitItem): Weapon[] {
+  function getWeapon(item: UnitItem): Weapon[] {
     // console.log('getWeapons2()', item);
-    return [{
+    return {
       pen: getPen(item),
       rof: getROF(item.ItemROF),
       range: getRange(item.ItemRange),
-    }]
+    }
   }
 
   function getWeapons(units: Unit[], type: 's'|'h'): Weapon[] {
@@ -449,7 +428,7 @@
 	</form>
   {:else}
   <div class="flow">
-    <h1>
+    <!-- <h1>
       {army.Platoons[0].PlatoonSubName.replace(/\+/gi, ' ')}
     </h1>
     <div>
@@ -463,11 +442,11 @@
     </div>
     <div>
       Model count (bodies): {models.length}
-    </div>
+    </div> -->
   
     <!-- Shots pr. turn -->
     <div>
-      <h3>Shots pr. turn (rate of fire)</h3>
+      <!-- <h3>Shots pr. turn (rate of fire)</h3>
       <div class="table">
         <div>Total number of Shots</div>
         <div>{shots.length}</div>
@@ -476,22 +455,22 @@
         <div>Avg. shots pr. weapon</div>
         <div>{(shots.length / weapons.length).toFixed(2)}</div>
         <div></div>
-      </div>
+      </div> -->
     </div>
 
     <!-- Weapons range -->
     <div>
-      <h3>Weapons Range distribution</h3>
+      <!-- <h3>Weapons Range distribution</h3>
       <div class="table">
         <div>Number of Weapons</div>
         <div>{weapons.length}</div>
         <div></div>
-      </div>
+      </div> -->
     </div>
 
     <!-- Mobility -->
     <div>
-      <h3>Units Mobility (Run speed) distribution</h3>
+      <!-- <h3>Units Mobility (Run speed) distribution</h3>
       <div class="table">
         <div>Total number of Units</div>
         <div>{units.length}</div>
@@ -512,12 +491,12 @@
         <div>24"</div>
         <div>{units.filter(unit => getMobility(unit) === 24).length}</div>
         <div class="bg-grey" style="width: {units.filter(unit => getMobility(unit) === 24).length}%"></div>
-      </div>
+      </div> -->
     </div>
     
     <!-- Units Damage Values -->
     <div>
-      <h3>Units Damage Value distribution</h3>
+      <!-- <h3>Units Damage Value distribution</h3>
       <div class="table">
         <div>Total number of Units</div>
         <div>{units.length}</div>
@@ -551,12 +530,12 @@
         <div>{units.filter(unit => getDamageValue(unit) === 9).length}</div>
         <div class="bg-grey" style="width: {units.filter(unit => getDamageValue(unit) === 9).length}%"></div>
         
-      </div>
+      </div> -->
     </div>
     
     <!-- Experiency -->
     <div>
-      <h3>Units Experience distribution</h3>
+      <!-- <h3>Units Experience distribution</h3>
       <div class="table">
         <div>Total number of Units</div>
         <div>{units.length}</div>
@@ -564,7 +543,7 @@
       </div>
       <div class="is-half">
         <canvas id="expChart"></canvas>
-      </div>
+      </div> -->
     </div>
 
   </div>
