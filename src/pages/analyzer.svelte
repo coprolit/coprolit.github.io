@@ -76,7 +76,7 @@
 		const url = formData.get('url');
     
     try {
-      const response = await fetch('http://www.philippesimpson.dk/armylist.php?url=' + url, {
+      const response = await fetch('https://www.philippesimpson.dk/armylist.php?url=' + url, {
         method: 'GET',
       });
       
