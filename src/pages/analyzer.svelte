@@ -1,44 +1,63 @@
 <script lang='ts'>
   import { onMount } from 'svelte';
 
-  interface UnitItem {
-    IsVehicle: 'false' | 'true';
-    ItemName: string;
-    ItemPEN: 'HE' | ' ' | 'n/a' | '+1'
-    ItemQuantity: number;
-    ItemROF: string;
-  }
-  
-  interface Shot {
-    name: string;
-    pen: number;
-    range: number;
-  }
-
   interface Weapon {
     pen: number;
     rof: number;
     range: number;
   }
   interface Model {
-    damageValue: number;
     name: string; // e.g. "Second (Junior) Lieutenant"
     weapons: Weapon[];
   }
+  interface Platoon {
+    name: string;
+    subName: string;
+    units: Unit[];
+  }
+  interface Army {
+    platoons: Platoon[]
+    orderDice: number;
+    points: number;
+  }
   interface Unit {
-    SectionName: string; // e.g. "Officer"
-    UnitName: string; // e.g. "Junior Lieutenant"
-    UnitSkill: 'Inexperienced' | 'Regular' | 'Veteran';
+    sectionName: string; // e.g. "Officer"
+    name: string; // e.g. "Junior Lieutenant"
+    skill: 'Inexperienced' | 'Regular' | 'Veteran';
+    damageValue: number;
     models: Model[];
     movement: number;
   }
-  interface Platoon {
+  
+  // API response interfaces:
+  interface UnitItemAPI {
+    IsVehicle: 'false' | 'true';
+    ItemName: string;
+    ItemPen?: 'HE' | ' ' | 'n/a' | '+1'
+    ItemPEN?: 'HE' | ' ' | 'n/a' | '+1'
+    ItemQuantity: number;
+    ItemROF: string;
+    ItemNotes: string;
+    ItemMobility: string;
+    ItemDamageValue: string;
+    ItemRange: string;
+    IsGun: 'true' | 'false';
+    ItemLine: number;
+    
+  }
+  interface UnitAPI {
+    SectionName: string; // e.g. "Officer"
+    UnitName: string; // e.g. "Junior Lieutenant"
+    UnitSkill: 'Inexperienced' | 'Regular' | 'Veteran';
+    UnitItems: UnitItemAPI[];
+  }
+  interface PlatoonAPI {
     PlatoonName: string;
     PlatoonSubName: string;
-    Units: Unit[];
+    Units: UnitAPI[];
   }
-  interface Army {
-    Platoons: Platoon[]
+  interface ArmyAPI {
+    Platoons: PlatoonAPI[]
     OrderDice: number;
     TotalPoints: number;
   }
@@ -46,13 +65,13 @@
   let init = true;
 
   let army: Army;
-  let units: Unit[];
-  let models: Model[];
-  let weapons: Weapon[];
-  let shots: Shots[];
-  let penetration: number[];
+  // let units: Unit[];
+  // let models: Model[];
+  // let weapons: Weapon[];
+  // let shots: Shot[];
+  // let penetration: number[];
   
-  async function importArmy(event: any): void {
+  async function importArmy(event: any): Promise<void> {
 		const formData = new FormData(event.target);
 		const url = formData.get('url');
     
@@ -65,44 +84,25 @@
 			  throw new Error(response.statusText);
       }
 
-      const result = await response.json();
-
-      // army = result;
+      const result: ArmyAPI = await response.json();
       console.log('result', result)
-      // // From platoons flatten down to units: 
-      // units = result.Platoons.flatMap(platoon => platoon.Units);
-
-      // // From units flatten down to models:
-      // models = getModels(units);
-
-      // // From units (TODO from models?) flatten down to weapons:
-      // weapons = getWeapons(units);
-      
-      // // From weapons flatten down to shots:
-      // shots = getShots(weapons);
 
       init = false;
 
-      const army2 = mapArmy(result);
-      console.log(army2);
+      army = mapArmy(result);
+      console.log(army);
     } catch (error) {
       throw error;
-    };
+    }
   }
 
-  function mapArmy(army: Army) {
-    const { OrderDice, TotalPoints } = army;
-
-    const Platoons = army.Platoons.map(platoon => {
-      const { PlatoonName, PlatoonSubName } = platoon;
-      
-      const Units = platoon.Units.map(unit => {
-        const { SectionName, UnitSkill, UnitName } = unit;
-
+  function mapArmy(army: ArmyAPI): Army {
+    const platoons: Platoon[] = army.Platoons.map(platoon => {
+      const Units: Unit[] = platoon.Units.map(unit => {
         return {
-          UnitName,
-          SectionName,
-          UnitSkill,
+          name: unit.UnitName,
+          sectionName: unit.SectionName,
+          skill: unit.UnitSkill,
           damageValue: getDamageValue(unit),
           movement: getMobility(unit),
           models: getModelItems(unit)
@@ -110,81 +110,30 @@
       })
 
       return {
-        PlatoonName,
-        PlatoonSubName,
-        Units,
+        name: platoon.PlatoonName,
+        subName: platoon.PlatoonSubName,
+        units: Units,
       }
     });
 
     return {
-      OrderDice,
-      TotalPoints,
-      Platoons
+      orderDice: army.OrderDice,
+      points: army.TotalPoints,
+      platoons
     }
   }
 
-  function getPen(item: UnitItem): number {
-    function getPenFromNotes(notes: string): number {
-      const regex = /HE \(/g; // e.g. HE (2")
-      // get inch (= Pen), convert to number:
-      return Number(notes.charAt(notes.search(regex) + 4));
-    }
-
-    return Number(item.ItemPEN)
-      || Number(item.ItemPen)
-      || ((item.ItemPen === 'HE' || item.ItemPEN === 'HE') ? getPenFromNotes(item.ItemNotes) : 0)
-      || 0;
-  }
-
-  function getRange(range: string): number {
-    // console.log('getRange', range, Number(range), typeof range === 'string')
-    // Expected value format: 12, 12", 12"-60", or 60"(30-72).
-
-    if(typeof range === 'string') {
-      if(range.length === 0) {
-        // if value === " ", assume an SMG.
-        return 12;
-      }
-      // Expected value format: 12", 12"-60", or 60"(30-72).  
-      return Number( range.slice(-3, -1) );
-    }
-
-    // Expected value format: 12.
-    return Number(range) || 12;
-  }
-
-  function getROF(itemROF: string): number {
-    
-    if (Number(itemROF)) {
-      return Number(itemROF);
-    }
-
-    // if value === "D6", assume an flamethrower.
-    if (itemROF.includes('D6')) {
-      return 1;
-    }
-    // if value === "-", assume 'equipped as modelled', so an SMG.
-    if (itemROF.includes('-')) {
-      return 2;
-    }
-
-    // if value === " ", assume an SMG.
-    return 2;
-  }
-
-  function quantityToItems(item: UnitItem): UnitItem[] {
-    return Array.from(Array(item.ItemQuantity)).map(() => item);
-  }
-
-  function getMobility(unit: Unit): number {
-    if (
-      unit.SectionName.includes('Infantry') ||
-      unit.SectionName.includes('Officer') ||
-      unit.SectionName.includes('Mortar') ||
-      unit.SectionName.includes('Anti-tank')
-    ) {
-      return 12;
-    }
+  function getMobility(unit: UnitAPI): number {
+    // console.log('getMobility()', unit);
+    // if (
+    //   unit.SectionName.includes('Infantry') ||
+    //   unit.SectionName.includes('Officer') ||
+    //   unit.SectionName.includes('Sniper') ||
+    //   unit.SectionName.includes('Mortar') ||
+    //   unit.SectionName.includes('Anti-tank')
+    // ) {
+    //   return 12;
+    // }
 
     if (
       unit.SectionName.includes('Artillery')
@@ -192,23 +141,28 @@
       return 6;
     }
     
-    if (unit.UnitItems[0].ItemMobility.includes('Wheeled')) {
-      return 24;
-    }
-    
-    if (unit.UnitItems[0].ItemMobility.includes('Tracked')) {
-      return 18;
+    if (unit.UnitItems[0].ItemMobility) {
+      // vehicle
+      if (unit.UnitItems[0].ItemMobility.includes('Wheeled')) {
+        return 24;
+      }
+      
+      if (unit.UnitItems[0].ItemMobility.includes('Tracked')) {
+        return 18;
+      }
     }
 
-    return 0;
+    // Assume basic infantry:
+    return 12;
   }
   
-  function getDamageValue(unit: Unit): number {
+  function getDamageValue(unit: UnitAPI): number {
     
     if (
       unit.SectionName.includes('Infantry') ||
       unit.SectionName.includes('Officer') ||
       unit.SectionName.includes('Mortar') ||
+      unit.SectionName.includes('Sniper') ||
       unit.SectionName.includes('Anti-tank') ||
       unit.SectionName.includes('Artillery')
     ) {
@@ -226,25 +180,11 @@
       // e.g. "9+"
       return Number(unit.UnitItems[0].ItemDamageValue.slice(0, -1));
     }
+
+    return 4;
   }
 
-  function mapToModel(item: UnitItem, unit: Unit): Model[] {
-    // console.log('mapToModel()', item)
-    return {
-      name: item.ItemName,
-      weapons: [getWeapon(item)]
-    }
-  }
-
-  function toCrewModels(item: UnitItem, index: number): Model[] {
-    // Attach crew weapon to first soldier, rest of crew is unarmed. 
-    return {
-      name: item.ItemName,
-      weapons: index === 0 ? [getWeapon(item)] : []
-    }
-  }
-
-  function getModelItems(unit: Unit): UnitItem[] {
+  function getModelItems(unit: UnitAPI): Model[] {
     // UnitItems:
     // An array containing nodes of each type of weapon in unit, and of any unit abilities.
     // Each weapon-type node defines the quantity of the weapon type.
@@ -263,13 +203,14 @@
         // - then flatten
         .flatMap((item) => quantityToItems(item))
         // map to Model model:
-        .map((item) => mapToModel(item, unit));
+        .map(item => mapToModel(item, unit));
     }
 
     // Support & Artillery Teams: 
     if (
       unit.SectionName.includes('Mortar') ||
       unit.SectionName.includes('Artillery') ||
+      unit.SectionName.includes('Sniper') ||
       unit.SectionName.includes('Anti-tank')
     ) {
       return unit
@@ -300,8 +241,7 @@
         // transform from quantity to items array:
         .flatMap((item) => quantityToItems(item))
         // map to Model model:
-        .map(toCrewModels)
-        // .map((item) => mapToModel(item, unit));
+        .map(toCrewModel)
     }
  
     if (
@@ -326,97 +266,78 @@
     return [];
   }
 
-  function getModels(units): Model[] {
-    // Each unit consists of one or more models.
-    // Flat each unit to its number of models,
-    // then flat all unit models to root level:
-    return units.flatMap(getModelItems)
+  function quantityToItems(item: UnitItemAPI): UnitItemAPI[] {
+    return Array.from(Array(item.ItemQuantity)).map(() => item);
   }
 
-  // filter for weapon-like items:
-  function getWeaponItems(unit: Unit): UnitItem[] {
-    // filter down to weapons only:
-    
-    // Officer:
-    if (unit.SectionName.includes('Officer')) {
-      return unit
-        .UnitItems
-        .filter(currentItem => !!currentItem.ItemQuantity)
-        .map(item => {
-          return {
-            ...item,
-            ItemROF: 2, // assuming SMG or assault rifle. 
-            ItemRange: 12, // assuming SMG.
-          };
-        });
+  function mapToModel(item: UnitItemAPI, unit: UnitAPI): Model {
+    // console.log('mapToModel()', item, unit)
+    return {
+      name: item.ItemName,
+      weapons: [getWeapon(item)]
     }
-
-    // Armoured Cars, Tanks and SP Guns:
-    if (unit.SectionName.includes('Armoured Cars') || unit.SectionName.includes('Tanks and SP Guns')) {
-      return unit
-        .UnitItems
-        .filter(item => !!item.IsGun)
-        .map(item => {
-          return {
-            ...item,
-            ItemQuantity: 1, // normalize: patch in missing prop.
-          };
-        });
+  }
+  function toCrewModel(item: UnitItemAPI, index: number): Model {
+    // Attach crew weapon to first soldier, rest of crew is unarmed. 
+    return {
+      name: item.ItemName,
+      weapons: index === 0 ? [getWeapon(item)] : []
     }
-    
-    // Infantry:
-    return unit
-      .UnitItems
-      .filter(currentItem => !!currentItem.ItemQuantity && !!Number(currentItem.ItemROF))
   }
 
-  function mapToWeapons(item: UnitItem): Weapon[] {
-    // transform quantity to items and map to weapon properties:
-    const weapons = Array.from(Array(item.ItemQuantity)).map(() => {
-      return {
-        name: item.ItemName,
-        pen: getPen(item),
-        rof: Number(item.ItemROF) || 1,
-        range: getRange(item.ItemRange),
+  function getPen(item: UnitItemAPI): number {
+    function getPenFromNotes(notes: string): number {
+      const regex = /HE \(/g; // e.g. HE (2")
+      // get inch (= Pen), convert to number:
+      return Number(notes.charAt(notes.search(regex) + 4));
+    }
+
+    return Number(item.ItemPEN)
+      || Number(item.ItemPen)
+      || ((item.ItemPen === 'HE' || item.ItemPEN === 'HE') ? getPenFromNotes(item.ItemNotes) : 0)
+      || 0;
+  }
+  function getRange(range: string): number {
+    // console.log('getRange', range, Number(range), typeof range === 'string')
+    // Expected value format: 12, 12", 12"-60", or 60"(30-72).
+
+    if(typeof range === 'string') {
+      if(range.length === 0) {
+        // if value === " ", assume an SMG.
+        return 12;
       }
-    });
-    return weapons;
+      // Expected value format: 12", 12"-60", or 60"(30-72).  
+      return Number( range.slice(-3, -1) );
+    }
+
+    // Expected value format: 12.
+    return Number(range) || 12;
+  }
+  function getROF(itemROF: string): number {
+    
+    if (Number(itemROF)) {
+      return Number(itemROF);
+    }
+
+    // if value === "D6", assume an flamethrower.
+    if (itemROF.includes('D6')) {
+      return 1;
+    }
+    // if value === "-", assume 'equipped as modelled', so an SMG.
+    if (itemROF.includes('-')) {
+      return 2;
+    }
+
+    // if value === " ", assume an SMG.
+    return 2;
   }
 
-  function getWeapon(item: UnitItem): Weapon[] {
-    // console.log('getWeapons2()', item);
+  function getWeapon(item: UnitItemAPI): Weapon {
     return {
       pen: getPen(item),
       rof: getROF(item.ItemROF),
       range: getRange(item.ItemRange),
     }
-  }
-
-  function getWeapons(units: Unit[], type: 's'|'h'): Weapon[] {
-    return units
-      // filter and flatten down to weapon-like unit items (an item can define multiple weapons, e.g. 8 rifles):
-      .flatMap(getWeaponItems)
-      // transform quantities to items and map to weapon properties:
-      .flatMap(mapToWeapons)
-  }
-
-  function weaponsByPen(weapons: Weapon[], pen: number) {
-    return weapons.filter(weapon => weapon.pen === pen);
-  }
-
-  function getShots(weapons: Weapon[]): Shot[] {
-    // flatmap to shots:
-    return weapons.flatMap(weapon => {
-      // weapons ROF map to shots:
-      const shots: Shot[] = Array.from(Array(weapon.rof)).map(() => {
-        return {
-          name: weapon.name,
-          pen: weapon.pen,
-          range: Number(weapon.range)
-        }
-      });
-      return shots;
-    });
   }
 </script>
 
@@ -428,19 +349,21 @@
 	</form>
   {:else}
   <div class="flow">
-    <!-- <h1>
-      {army.Platoons[0].PlatoonSubName.replace(/\+/gi, ' ')}
-    </h1>
     <div>
-      Type: {army.Platoons[0].PlatoonName}
+      Order Dice: {army.orderDice}
     </div>
     <div>
-      Order Dice: {army.OrderDice}
+      Total Points: {army.points}
     </div>
+    {#each army.platoons as platoon}
     <div>
-      Total Points: {army.TotalPoints}
+      {platoon.name}
     </div>
-    <div>
+    <h3>
+      {platoon.subName}
+    </h3>
+    {/each}
+    <!-- <div>
       Model count (bodies): {models.length}
     </div> -->
   
