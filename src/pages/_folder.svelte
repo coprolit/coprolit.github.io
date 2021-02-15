@@ -24,6 +24,10 @@
     Missions
   </a>
 
+  <a href={$url('/analyzer')} class:active={$isActive('/analyzer')}>
+    Analyzer
+  </a>
+
   <a href={$url('/about')} class:active={$isActive('/about')}>
     About
   </a>
