@@ -290,7 +290,7 @@ fieldset > legend {
 }
 
 .bg-grey {
-	background-color: gainsboro;
+	background-color: darkgrey; /* gainsboro; */
 }
 .bg-accent {
 	background-color: var(--color-accent);
@@ -333,4 +333,14 @@ figure img {
 	.two-column {
 		grid-template-columns: 25% auto /* 49% 49% */;
 	}
+}
+
+.is-half {
+	width: 50%;
+}
+.is-one-third {
+	width: 33%;
+}
+.is-one-quarter {
+	width: 25%;
 }
