@@ -1,10 +1,11 @@
 <script lang='ts'>
-  import { onMount } from 'svelte';
 
   interface Weapon {
+    name: string;
     pen: number;
     rof: number;
     range: number;
+    type: 'AT'|'HE'|'SA'
   }
   interface Model {
     name: string; // e.g. "Second (Junior) Lieutenant"
@@ -25,7 +26,8 @@
     name: string; // e.g. "Junior Lieutenant"
     skill: 'Inexperienced' | 'Regular' | 'Veteran';
     damageValue: number;
-    models: Model[];
+    models?: Model[];
+    weapons?: Weapon[];
     movement: number;
   }
   
@@ -65,11 +67,6 @@
   let init = true;
 
   let army: Army;
-  // let units: Unit[];
-  // let models: Model[];
-  // let weapons: Weapon[];
-  // let shots: Shot[];
-  // let penetration: number[];
   
   async function importArmy(event: any): Promise<void> {
 		const formData = new FormData(event.target);
@@ -92,6 +89,7 @@
       army = mapArmy(result);
       console.log(army);
     } catch (error) {
+      alert('Army list not found.');
       throw error;
     }
   }
@@ -105,7 +103,8 @@
           skill: unit.UnitSkill,
           damageValue: getDamageValue(unit),
           movement: getMobility(unit),
-          models: getModelItems(unit)
+          // models: getUnitItems(unit),
+          weapons: getUnitItems(unit)
         }
       })
 
@@ -184,7 +183,7 @@
     return 4;
   }
 
-  function getModelItems(unit: UnitAPI): Model[] {
+  function getUnitItems(unit: UnitAPI): Weapon[] {
     // UnitItems:
     // An array containing nodes of each type of weapon in unit, and of any unit abilities.
     // Each weapon-type node defines the quantity of the weapon type.
@@ -201,9 +200,10 @@
         // For each UnitItem type array:
         // - transform from quantity to items array (an item for each weapon/model)
         // - then flatten
-        .flatMap((item) => quantityToItems(item))
+        .flatMap(quantityToItems)
         // map to Model model:
-        .map(item => mapToModel(item, unit));
+        // .map(item => mapToWeapon(item, unit));
+        .map(getWeapon);
     }
 
     // Support & Artillery Teams: 
@@ -211,13 +211,14 @@
       unit.SectionName.includes('Mortar') ||
       unit.SectionName.includes('Artillery') ||
       unit.SectionName.includes('Sniper') ||
+      unit.SectionName.includes('Machine Gun') ||
       unit.SectionName.includes('Anti-tank')
     ) {
       return unit
         .UnitItems
         .filter(currentItem => !!currentItem.ItemQuantity)
-        // map from team size value to quantity:
-        .map(item => {
+        // map from ItemNotes team size value to quantity:
+        /* .map(item => {
           let men = 0;
           
           const isSpotter = item.ItemNotes.includes('Spotter');
@@ -237,12 +238,60 @@
             ...item,
             ItemQuantity: men,
           };
-        })
+        }) */
         // transform from quantity to items array:
         .flatMap((item) => quantityToItems(item))
         // map to Model model:
-        .map(toCrewModel)
+        // .map(toCrewModel)
+        .map(getWeapon)
     }
+
+    // unit.SectionName.includes('Sniper') ||
+
+    /*
+      USSR sniper:
+      0:
+        IsVehicle: "false"
+        ItemLine: 1
+        ItemName: "Sniper team"
+        ItemNotes: "Team (2 men), Sniper"
+        ItemPEN: "n/a"
+        ItemQuantity: 1
+        ItemROF: "1"
+        ItemRange: "36""
+        ItemSequence: 1
+
+      US sniper:
+      0:
+        IsVehicle: "false"
+        ItemLine: 1
+        ItemName: "Sniper team"
+        ItemNotes: "Team (2 men), Sniper (Sniper with rifle & pistol- Spotter with pistol)"
+        ItemPEN: "n/a"
+        ItemQuantity: 1
+        ItemROF: "1"
+        ItemRange: "36""
+        ItemSequence: 1
+      1:
+        IsVehicle: "false"
+        ItemLine: 2
+        ItemName: "with Pistol"
+        ItemNotes: "Assault"
+        ItemPen: "n/a"
+        ItemROF: "1"
+        ItemRange: "6""
+        ItemSequence: 2
+      2:
+        IsVehicle: "false"
+        ItemLine: 3
+        ItemName: "with Pistol replaced by Submachine gun"
+        ItemNotes: "Assault"
+        ItemPEN: "n/a"
+        ItemQuantity: 1
+        ItemROF: "2"
+        ItemRange: "12""
+        ItemSequence: 3
+    */
  
     if (
       unit.SectionName.includes('Armoured Cars') || 
@@ -250,16 +299,19 @@
     ) {
       return unit
         .UnitItems
-        .filter(currentItem => currentItem.IsVehicle === 'true')
-        // for each vehicle model get its associated/mounted weapons:
-        .map(vehicle => {
-          const weapons = unit.UnitItems.filter(item => item.IsGun === 'true' && (item.ItemLine === vehicle.ItemLine))
+        // .filter(currentItem => currentItem.IsVehicle === 'true')
+        // // for each vehicle model get its associated/mounted weapons:
+        // .map(vehicle => {
+        //   const weapons = unit.UnitItems.filter(item => item.IsGun === 'true' && (item.ItemLine === vehicle.ItemLine))
           
-          return {
-            name: vehicle.ItemName,
-            weapons: weapons.flatMap(getWeapon)
-          }
-        })
+        //   return {
+        //     name: vehicle.ItemName,
+        //     weapons: weapons.flatMap(getWeapon)
+        //   }
+        // })
+        // .flatMap(weapons = weapons.flatMap(getWeapon))
+        .filter(currentItem => currentItem.IsGun === 'true')
+        .map(getWeapon)
     }
 
     // Unknown unit type
@@ -268,21 +320,6 @@
 
   function quantityToItems(item: UnitItemAPI): UnitItemAPI[] {
     return Array.from(Array(item.ItemQuantity)).map(() => item);
-  }
-
-  function mapToModel(item: UnitItemAPI, unit: UnitAPI): Model {
-    // console.log('mapToModel()', item, unit)
-    return {
-      name: item.ItemName,
-      weapons: [getWeapon(item)]
-    }
-  }
-  function toCrewModel(item: UnitItemAPI, index: number): Model {
-    // Attach crew weapon to first soldier, rest of crew is unarmed. 
-    return {
-      name: item.ItemName,
-      weapons: index === 0 ? [getWeapon(item)] : []
-    }
   }
 
   function getPen(item: UnitItemAPI): number {
@@ -337,7 +374,18 @@
       pen: getPen(item),
       rof: getROF(item.ItemROF),
       range: getRange(item.ItemRange),
+      type: getType(item)
     }
+  }
+
+  function getType(item: UnitItemAPI): 'AT'|'HE'|'SA' {
+    if (Number(item.ItemPEN) || Number(item.ItemPen)) {
+      return 'AT';
+    }
+    if (item.ItemPen === 'HE' || item.ItemPEN === 'HE') {
+      return 'HE';
+    }
+    return 'SA'; // Small-Arms
   }
 </script>
 
