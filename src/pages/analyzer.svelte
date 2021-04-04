@@ -410,6 +410,11 @@
     <h3>
       {platoon.subName}
     </h3>
+    <div>
+      <pre>
+        {JSON.stringify(platoon,null,2)}
+      </pre>
+    </div>
     {/each}
     <!-- <div>
       Model count (bodies): {models.length}
