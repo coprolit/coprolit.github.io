@@ -549,4 +549,11 @@
     grid-template-columns: 15% 5% 80%;
     gap: var(--spacing-small);
   }
+
+  pre {
+    font-family: monospace;
+    border: lightgrey solid 1px;
+    background-color: white;
+    padding: 1rem;
+  }
 </style>
