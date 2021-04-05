@@ -5,7 +5,17 @@
     pen: number;
     rof: number;
     range: number;
-    type: 'AT'|'HE'|'SA'
+    special: {
+      HE?: boolean,
+      flamethrower?: boolean,
+      fixed?: boolean,
+      howitzer?: boolean,
+      indirect?: boolean,
+      team?: boolean,
+      recce?: boolean,
+      coaxial?: boolean,
+      arc?: 'front'|'turret'
+    }
   }
   interface Model {
     name: string; // e.g. "Second (Junior) Lieutenant"
@@ -104,7 +114,7 @@
           damageValue: getDamageValue(unit),
           movement: getMobility(unit),
           // models: getUnitItems(unit),
-          weapons: getUnitItems(unit)
+          weapons: getWeapons(unit)
         }
       })
 
@@ -123,17 +133,6 @@
   }
 
   function getMobility(unit: UnitAPI): number {
-    // console.log('getMobility()', unit);
-    // if (
-    //   unit.SectionName.includes('Infantry') ||
-    //   unit.SectionName.includes('Officer') ||
-    //   unit.SectionName.includes('Sniper') ||
-    //   unit.SectionName.includes('Mortar') ||
-    //   unit.SectionName.includes('Anti-tank')
-    // ) {
-    //   return 12;
-    // }
-
     if (
       unit.SectionName.includes('Artillery')
     ) {
@@ -183,10 +182,12 @@
     return 4;
   }
 
-  function getUnitItems(unit: UnitAPI): Weapon[] {
+  function getWeapons(unit: UnitAPI): Weapon[] {
     // UnitItems:
     // An array containing nodes of each type of weapon in unit, and of any unit abilities.
     // Each weapon-type node defines the quantity of the weapon type.
+
+    // TODO handle Twin/Quad linked weapons
     
     // HQ units & Infantry:
     if (
@@ -201,8 +202,6 @@
         // - transform from quantity to items array (an item for each weapon/model)
         // - then flatten
         .flatMap(quantityToItems)
-        // map to Model model:
-        // .map(item => mapToWeapon(item, unit));
         .map(getWeapon);
     }
 
@@ -216,7 +215,10 @@
     ) {
       return unit
         .UnitItems
+        // Get quantity:
         .filter(currentItem => !!currentItem.ItemQuantity)
+        // Ignore spotters (they're unarmed):
+        .filter(currentItem => !currentItem.ItemNotes.includes('Spotter'))
         // map from ItemNotes team size value to quantity:
         /* .map(item => {
           let men = 0;
@@ -240,13 +242,9 @@
           };
         }) */
         // transform from quantity to items array:
-        .flatMap((item) => quantityToItems(item))
-        // map to Model model:
-        // .map(toCrewModel)
+        .flatMap(quantityToItems)
         .map(getWeapon)
     }
-
-    // unit.SectionName.includes('Sniper') ||
 
     /*
       USSR sniper:
@@ -318,6 +316,10 @@
     return [];
   }
 
+  /**
+   * Expand from ItemQuantity amount to UnitItems
+   * @param item
+   */
   function quantityToItems(item: UnitItemAPI): UnitItemAPI[] {
     return Array.from(Array(item.ItemQuantity)).map(() => item);
   }
@@ -335,9 +337,7 @@
       || 0;
   }
   function getRange(range: string): number {
-    // console.log('getRange', range, Number(range), typeof range === 'string')
     // Expected value format: 12, 12", 12"-60", or 60"(30-72).
-
     if(typeof range === 'string') {
       if(range.length === 0) {
         // if value === " ", assume an SMG.
@@ -370,22 +370,59 @@
   }
 
   function getWeapon(item: UnitItemAPI): Weapon {
+    if (item.ItemName.includes('Infantry (equipped as modeled')) {
+      // Assume equipped with SMG.
+      return {
+        name: 'SMG',
+        pen: 0,
+        rof: 2,
+        range: 12,
+        special: {},
+      }
+    }
+
     return {
+      name: item.ItemName,
       pen: getPen(item),
       rof: getROF(item.ItemROF),
       range: getRange(item.ItemRange),
-      type: getType(item)
+      special: getSpecialRules(item),
     }
   }
 
-  function getType(item: UnitItemAPI): 'AT'|'HE'|'SA' {
-    if (Number(item.ItemPEN) || Number(item.ItemPen)) {
-      return 'AT';
-    }
+  function getSpecialRules(item: UnitItemAPI): Weapon['special'] {
+    console.log('getSpecialRules', item)
+    let specialRules: Weapon['special'] = {};
+    
     if (item.ItemPen === 'HE' || item.ItemPEN === 'HE') {
-      return 'HE';
+      specialRules.HE = true;
     }
-    return 'SA'; // Small-Arms
+    if (item.ItemNotes.includes('Fixed')) {
+      specialRules.fixed = true;
+    }
+    if (item.ItemNotes.includes('Indirect')) {
+      specialRules.indirect = true;
+    }
+    if (item.ItemNotes.includes('Howitzer')) {
+      specialRules.howitzer = true;
+    }
+    if (item.ItemNotes.includes('Flamethrower')) {
+      specialRules.flamethrower = true;
+    }
+    if (item.ItemNotes.includes('Team')) {
+      specialRules.team = true;
+    }
+    if (item.ItemName.includes('Co-axial')) {
+      specialRules.coaxial = true;
+    }
+    if (item.ItemNotes.includes('Front arc')) {
+      specialRules.arc = 'front';
+    }
+    if (item.ItemName.includes('Turret-mounted')) {
+      specialRules.arc = 'turret';
+    }
+        
+    return specialRules;
   }
 </script>
 
@@ -410,12 +447,13 @@
     <h3>
       {platoon.subName}
     </h3>
+    {/each}
+    <!-- Army output -->
     <div>
       <pre>
-        {JSON.stringify(platoon,null,2)}
+        {JSON.stringify(army,null,2)}
       </pre>
     </div>
-    {/each}
     <!-- <div>
       Model count (bodies): {models.length}
     </div> -->
