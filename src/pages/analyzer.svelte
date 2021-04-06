@@ -7,12 +7,9 @@
     range: number;
     special: {
       HE?: boolean,
+      fire?: 'direct'|'indirect'|'howitzer'
       flamethrower?: boolean,
       fixed?: boolean,
-      howitzer?: boolean,
-      indirect?: boolean,
-      team?: boolean,
-      recce?: boolean,
       coaxial?: boolean,
       arc?: 'front'|'turret'
     }
@@ -391,30 +388,31 @@
   }
 
   function getSpecialRules(item: UnitItemAPI): Weapon['special'] {
-    console.log('getSpecialRules', item)
     let specialRules: Weapon['special'] = {};
     
     if (item.ItemPen === 'HE' || item.ItemPEN === 'HE') {
       specialRules.HE = true;
     }
+
     if (item.ItemNotes.includes('Fixed')) {
       specialRules.fixed = true;
     }
+
     if (item.ItemNotes.includes('Indirect')) {
-      specialRules.indirect = true;
+      specialRules.fire = 'indirect';
     }
     if (item.ItemNotes.includes('Howitzer')) {
-      specialRules.howitzer = true;
+      specialRules.fire = 'howitzer';
     }
+
     if (item.ItemNotes.includes('Flamethrower')) {
       specialRules.flamethrower = true;
     }
-    if (item.ItemNotes.includes('Team')) {
-      specialRules.team = true;
-    }
+
     if (item.ItemName.includes('Co-axial')) {
       specialRules.coaxial = true;
     }
+
     if (item.ItemNotes.includes('Front arc')) {
       specialRules.arc = 'front';
     }
