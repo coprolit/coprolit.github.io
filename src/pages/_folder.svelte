@@ -9,7 +9,7 @@
     </a>
     <img width="100%" src="https://www.boltaction.com/images/Bolt-Action-logo.jpg">
     <div class="tagline">
-      <i>Your one stop destination for starting up a Bolt Action game.</i>
+      &#9432; <strong>Attention:</strong> Command Post is moving! Going forward, go to https://coprolit.github.io/ to use Command Post.
     </div>
   </div>
 </header>
@@ -22,10 +22,6 @@
 
   <a href={$url('/missions')} class:active={$isActive('/missions')}>
     Missions
-  </a>
-
-  <a href={$url('/analyzer')} class:active={$isActive('/analyzer')}>
-    Analyzer
   </a>
 
   <a href={$url('/about')} class:active={$isActive('/about')}>
@@ -48,3 +44,9 @@
 <main class="flow">
   <slot />
 </main>
+
+<footer>
+<div class="tagline">
+&#9432; <strong>Attention:</strong> Command Post is moving. Going forward, go to https://coprolit.github.io/ to use Command Post.
+</div>
+</footer>
