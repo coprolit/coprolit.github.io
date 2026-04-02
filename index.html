@@ -12,13 +12,13 @@
   <div id="sheet-data">Loading...</div>
 
   <script>
-    const sheetUrl = 'https://spreadsheets.google.com/feeds/list/1JsawymKJADyuKcigW80DVj__yFAwQFpWKCALTXBo0gE/gviz/tq?tqx=out:json&tq&gid=0';
+    const sheetUrl = 'https://docs.google.com/spreadsheets/d/1JsawymKJADyuKcigW80DVj__yFAwQFpWKCALTXBo0gE/gviz/tq?tqx=out:json&tq&gid=0';
     const proxyUrl = 'https://cors.io/?url=' + sheetUrl;
 
     async function loadSheet() {
       const container = document.getElementById("sheet-data");
       try {
-        const response = await fetch(proxyUrl);
+        const response = await fetch(sheetUrl);
         const data = await response.json();
 
         const entries = data.feed.entry;
