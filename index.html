@@ -19,43 +19,44 @@
       const container = document.getElementById("sheet-data");
       try {
         const response = await fetch(sheetUrl);
-        const data = await response.json();
+        console.log(response)
+        // const data = await response.json();
 
-        const entries = data.feed.entry;
-        if (!entries || entries.length === 0) {
-          container.textContent = "No data found.";
-          return;
-        }
+        // const entries = data.feed.entry;
+        // if (!entries || entries.length === 0) {
+        //   container.textContent = "No data found.";
+        //   return;
+        // }
 
-        // Extract column keys from the first entry (keys starting with "gsx$")
-        const cols = Object.keys(entries[0])
-          .filter(k => k.startsWith("gsx$"))
-          .map(k => k.replace("gsx$", ""));
+        // // Extract column keys from the first entry (keys starting with "gsx$")
+        // const cols = Object.keys(entries[0])
+        //   .filter(k => k.startsWith("gsx$"))
+        //   .map(k => k.replace("gsx$", ""));
 
-        const table = document.createElement("table");
-        table.border = "1";
+        // const table = document.createElement("table");
+        // table.border = "1";
 
-        // Header row
-        const thead = table.createTHead();
-        const headerRow = thead.insertRow();
-        cols.forEach(col => {
-          const th = document.createElement("th");
-          th.textContent = col;
-          headerRow.appendChild(th);
-        });
+        // // Header row
+        // const thead = table.createTHead();
+        // const headerRow = thead.insertRow();
+        // cols.forEach(col => {
+        //   const th = document.createElement("th");
+        //   th.textContent = col;
+        //   headerRow.appendChild(th);
+        // });
 
-        // Data rows
-        const tbody = table.createTBody();
-        entries.forEach(entry => {
-          const tr = tbody.insertRow();
-          cols.forEach(col => {
-            const td = tr.insertCell();
-            td.textContent = entry["gsx$" + col]?.$t ?? "";
-          });
-        });
+        // // Data rows
+        // const tbody = table.createTBody();
+        // entries.forEach(entry => {
+        //   const tr = tbody.insertRow();
+        //   cols.forEach(col => {
+        //     const td = tr.insertCell();
+        //     td.textContent = entry["gsx$" + col]?.$t ?? "";
+        //   });
+        // });
 
-        container.innerHTML = "";
-        container.appendChild(table);
+        // container.innerHTML = "";
+        // container.appendChild(table);
       } catch (err) {
         container.textContent = "Failed to load data: " + err.message;
       }
