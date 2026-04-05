@@ -18,8 +18,13 @@
     async function loadSheet() {
       const container = document.getElementById("sheet-data");
       try {
-        const response = await fetch(sheetUrl);
-      window.test = response;
+        const text = await (await fetch(sheetUrl)).text();
+        // Strip: google.visualization.Query.setResponse( ... );
+        const json = JSON.parse(text.substring(47).slice(0, -2));
+        const rows = json.table.rows;
+
+        // const response = await fetch(sheetUrl);
+        // window.test = response;
         // console.log(response)
         // console.log(response.body)
         // console.log(response.body.getDataTable())
