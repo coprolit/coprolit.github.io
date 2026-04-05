@@ -12,15 +12,20 @@
   <div id="sheet-data">Loading...</div>
 
   <script>
-    const sheetUrl = 'https://docs.google.com/spreadsheets/d/1JsawymKJADyuKcigW80DVj__yFAwQFpWKCALTXBo0gE/gviz/tq?tqx=out:json&tq&gid=0';
+    const id = '1JsawymKJADyuKcigW80DVj__yFAwQFpWKCALTXBo0gE'
+    const sheet = 'Ark1';
+    const sheetUrl = 'https://docs.google.com/spreadsheets/d/1JsawymKJADyuKcigW80DVj__yFAwQFpWKCALTXBo0gE/gviz/tq?tqx=out:json&tq&gid=0&sheet:Ark1';
     const proxyUrl = 'https://cors.io/?url=' + sheetUrl;
+    const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheet,)}`;
 
     async function loadSheet() {
       const container = document.getElementById("sheet-data");
       try {
-        const text = await (await fetch(sheetUrl)).text();
+        const text = await (await fetch(url)).text();
         // Strip: google.visualization.Query.setResponse( ... );
         const json = JSON.parse(text.substring(47).slice(0, -2));
+        window.test = json;
+        console.log(json)
         const rows = json.table.rows;
 
         // const response = await fetch(sheetUrl);
