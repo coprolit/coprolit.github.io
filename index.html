@@ -1,68 +1,74 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coach Dreyer Training Plans</title>
-</head>
-<body>
-  <h1>Coach Dreyer Training Plans</h1>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coach Dreyer Training Plans</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Coach Dreyer Training Plans</h1>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
+      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+      veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+      commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+      velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+      cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+      est laborum.
+    </p>
 
-  <div id="sheet-data">Loading...</div>
+    <div id="sheet-data">Loading...</div>
 
-  <script>
-    const sheetUrl = 'https://docs.google.com/spreadsheets/d/1JsawymKJADyuKcigW80DVj__yFAwQFpWKCALTXBo0gE/gviz/tq?tqx=out:json&tq&gid=0';
-    const proxyUrl = 'https://cors.io/?url=' + sheetUrl;
+    <script>
+      const id = "1JsawymKJADyuKcigW80DVj__yFAwQFpWKCALTXBo0gE";
+      const sheet = "Ark1";
+      const sheetUrl =
+        "https://docs.google.com/spreadsheets/d/1JsawymKJADyuKcigW80DVj__yFAwQFpWKCALTXBo0gE/gviz/tq?tqx=out:json&tq&gid=0&sheet:Ark1";
+      const proxyUrl = "https://cors.io/?url=" + sheetUrl;
+      const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheet)}`;
 
-    async function loadSheet() {
-      const container = document.getElementById("sheet-data");
-      try {
-        const response = await fetch(sheetUrl);
-        const data = await response.json();
+      async function loadSheet() {
+        const container = document.getElementById("sheet-data");
+        try {
+          const response = await fetch(url);
+          const text = await response.text();
+          const json = JSON.parse(text.substring(47).slice(0, -2)); // Strip: google.visualization.Query.setResponse( ... );
+          const rows = json.table.rows;
 
-        const entries = data.feed.entry;
-        if (!entries || entries.length === 0) {
-          container.textContent = "No data found.";
-          return;
-        }
+          console.log(rows);
 
-        // Extract column keys from the first entry (keys starting with "gsx$")
-        const cols = Object.keys(entries[0])
-          .filter(k => k.startsWith("gsx$"))
-          .map(k => k.replace("gsx$", ""));
+          const table = document.createElement("table");
+          table.border = "1";
 
-        const table = document.createElement("table");
-        table.border = "1";
-
-        // Header row
-        const thead = table.createTHead();
-        const headerRow = thead.insertRow();
-        cols.forEach(col => {
-          const th = document.createElement("th");
-          th.textContent = col;
-          headerRow.appendChild(th);
-        });
-
-        // Data rows
-        const tbody = table.createTBody();
-        entries.forEach(entry => {
-          const tr = tbody.insertRow();
-          cols.forEach(col => {
-            const td = tr.insertCell();
-            td.textContent = entry["gsx$" + col]?.$t ?? "";
+          // Header row
+          const thead = table.createTHead();
+          const headerRow = thead.insertRow();
+          rows[0].c.forEach((col) => {
+            const th = document.createElement("th");
+            th.textContent = col.v;
+            headerRow.appendChild(th);
           });
-        });
 
-        container.innerHTML = "";
-        container.appendChild(table);
-      } catch (err) {
-        container.textContent = "Failed to load data: " + err.message;
+          // Data rows
+          const dataRows = rows.slice(1);
+          const tbody = table.createTBody();
+          dataRows.forEach((entry) => {
+            const tr = tbody.insertRow();
+            entry.c.forEach((col) => {
+              const td = tr.insertCell();
+              td.textContent = col.v;
+            });
+          });
+
+          container.innerHTML = "";
+          container.appendChild(table);
+        } catch (err) {
+          container.textContent = "Failed to load data: " + err.message;
+        }
       }
-    }
 
-    loadSheet();
-  </script>
-</body>
+      loadSheet();
+    </script>
+  </body>
 </html>
-
