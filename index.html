@@ -21,6 +21,9 @@
         const response = await fetch(sheetUrl);
       
         console.log(response)
+        console.log(response.body)
+        console.log(response.body.getDataTable())
+        console.log(response.body.getReader())
         console.log(response.google)
         console.log(response.google?.visualization)
         console.log(response.google?.visualization?.Query)
