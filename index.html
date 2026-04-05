@@ -20,7 +20,9 @@
       try {
         const response = await fetch(sheetUrl);
         const data = await response.json();
-        console.log(data)
+        console.log(response.google.visualization.Query.setResponse())
+        console.log(response.google.visualization.Query.setResponse()[0])
+        console.log(response.google.visualization.Query)
 
         // const entries = data.feed.entry;
         // if (!entries || entries.length === 0) {
