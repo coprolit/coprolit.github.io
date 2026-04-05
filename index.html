@@ -21,25 +21,10 @@
     async function loadSheet() {
       const container = document.getElementById("sheet-data");
       try {
-        const text = await (await fetch(url)).text();
-        // Strip: google.visualization.Query.setResponse( ... );
-        const json = JSON.parse(text.substring(47).slice(0, -2));
-        window.test = json;
-        console.log(json)
+        const response = await fetch(url);
+        const text = await response.text();
+        const json = JSON.parse(text.substring(47).slice(0, -2)); // Strip: google.visualization.Query.setResponse( ... );
         const rows = json.table.rows;
-
-        // const response = await fetch(sheetUrl);
-        // window.test = response;
-        // console.log(response)
-        // console.log(response.body)
-        // console.log(response.body.getDataTable())
-        // console.log(response.body.getReader())
-        // console.log(response.google)
-        // console.log(response.google?.visualization)
-        // console.log(response.google?.visualization?.Query)
-        // console.log(response.google?.visualization?.Query[0])
-        // console.log(response.google?.visualization?.Query?.setResponse())
-        // console.log(response.google?.visualization?.Query?.setResponse()[0])
 
         // const entries = data.feed.entry;
         // if (!entries || entries.length === 0) {
@@ -52,30 +37,31 @@
         //   .filter(k => k.startsWith("gsx$"))
         //   .map(k => k.replace("gsx$", ""));
 
-        // const table = document.createElement("table");
-        // table.border = "1";
+        const table = document.createElement("table");
+        table.border = "1";
 
-        // // Header row
-        // const thead = table.createTHead();
-        // const headerRow = thead.insertRow();
-        // cols.forEach(col => {
-        //   const th = document.createElement("th");
-        //   th.textContent = col;
-        //   headerRow.appendChild(th);
-        // });
+        // Header row
+        const thead = table.createTHead();
+        const headerRow = thead.insertRow();
+        rows[0].forEach(col => {
+          const th = document.createElement("th");
+          th.textContent = col;
+          headerRow.appendChild(th);
+        });
 
-        // // Data rows
-        // const tbody = table.createTBody();
-        // entries.forEach(entry => {
-        //   const tr = tbody.insertRow();
-        //   cols.forEach(col => {
-        //     const td = tr.insertCell();
-        //     td.textContent = entry["gsx$" + col]?.$t ?? "";
-        //   });
-        // });
+        // Data rows
+        const dataRows = rows.slice(1);
+        const tbody = table.createTBody();
+        dataRows.forEach(entry => {
+          const tr = tbody.insertRow();
+          entry.c.forEach(col => {
+            const td = tr.insertCell();
+            td.textContent = col;
+          });
+        });
 
-        // container.innerHTML = "";
-        // container.appendChild(table);
+        container.innerHTML = "";
+        container.appendChild(table);
       } catch (err) {
         container.textContent = "Failed to load data: " + err.message;
       }
