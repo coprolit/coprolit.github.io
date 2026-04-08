@@ -46,7 +46,7 @@
           const headerRow = thead.insertRow();
           rows[0].c.forEach((col) => {
             const th = document.createElement("th");
-            th.textContent = col.v;
+            th.textContent = col.v ?? '';
             headerRow.appendChild(th);
           });
 
@@ -57,7 +57,7 @@
             const tr = tbody.insertRow();
             entry.c.forEach((col) => {
               const td = tr.insertCell();
-              td.textContent = col.v;
+              td.textContent = col.v ?? '';
             });
           });
 
