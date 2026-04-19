@@ -20,55 +20,172 @@
 
     <div id="sheet-data">Loading...</div>
 
-    <script>
-      const id = "1JsawymKJADyuKcigW80DVj__yFAwQFpWKCALTXBo0gE";
-      const sheet = "Ark1";
-      const sheetUrl =
-        "https://docs.google.com/spreadsheets/d/1JsawymKJADyuKcigW80DVj__yFAwQFpWKCALTXBo0gE/gviz/tq?tqx=out:json&tq&gid=0&sheet:Ark1";
-      const proxyUrl = "https://cors.io/?url=" + sheetUrl;
-      const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheet)}`;
+    <script type="module">
+      // const id = "1JsawymKJADyuKcigW80DVj__yFAwQFpWKCALTXBo0gE";
+      // const sheet = "Ark1";
+      // const sheetUrl =
+      //   "https://docs.google.com/spreadsheets/d/1JsawymKJADyuKcigW80DVj__yFAwQFpWKCALTXBo0gE/gviz/tq?tqx=out:json&tq&gid=0&sheet:Ark1";
+      // const proxyUrl = "https://cors.io/?url=" + sheetUrl;
+      // const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheet)}`;
 
-      async function loadSheet() {
-        const container = document.getElementById("sheet-data");
-        try {
-          const response = await fetch(url);
-          const text = await response.text();
-          const json = JSON.parse(text.substring(47).slice(0, -2)); // Strip: google.visualization.Query.setResponse( ... );
-          const rows = json.table.rows;
+      // async function loadSheet() {
+      //   const container = document.getElementById("sheet-data");
+      //   try {
+      //     const response = await fetch(url);
+      //     const text = await response.text();
+      //     const json = JSON.parse(text.substring(47).slice(0, -2)); // Strip: google.visualization.Query.setResponse( ... );
+      //     const rows = json.table.rows;
 
-          console.log(rows);
+      //     console.log(rows);
 
-          const table = document.createElement("table");
-          table.border = "1";
+      //     const table = document.createElement("table");
+      //     table.border = "1";
 
-          // Header row
-          const thead = table.createTHead();
-          const headerRow = thead.insertRow();
-          rows[0].c.forEach((col) => {
-            const th = document.createElement("th");
-            th.textContent = col?.v ?? '';
-            headerRow.appendChild(th);
-          });
+      //     // Header row
+      //     const thead = table.createTHead();
+      //     const headerRow = thead.insertRow();
+      //     rows[0].c.forEach((col) => {
+      //       const th = document.createElement("th");
+      //       th.textContent = col?.v ?? '';
+      //       headerRow.appendChild(th);
+      //     });
 
-          // Data rows
-          const dataRows = rows.slice(1);
-          const tbody = table.createTBody();
-          dataRows.forEach((entry) => {
-            const tr = tbody.insertRow();
-            entry.c.forEach((col) => {
-              const td = tr.insertCell();
-              td.textContent = col?.v ?? '';
-            });
-          });
+      //     // Data rows
+      //     const dataRows = rows.slice(1);
+      //     const tbody = table.createTBody();
+      //     dataRows.forEach((entry) => {
+      //       const tr = tbody.insertRow();
+      //       entry.c.forEach((col) => {
+      //         const td = tr.insertCell();
+      //         td.textContent = col?.v ?? '';
+      //       });
+      //     });
 
-          container.innerHTML = "";
-          container.appendChild(table);
-        } catch (err) {
-          container.textContent = "Failed to load data: " + err.message;
+      //     container.innerHTML = "";
+      //     container.appendChild(table);
+      //   } catch (err) {
+      //     container.textContent = "Failed to load data: " + err.message;
+      //   }
+      // }
+
+      // await loadSheet();
+
+      const SHEET_ID = "1JsawymKJADyuKcigW80DVj__yFAwQFpWKCALTXBo0gE";
+      const API_KEY = "AIzaSyCw0zGv14vKpt2GjPrXzR7u6hUqZV6JV_4";
+      const RANGE = "Ark1!A1:Z1000";
+      const FIELDS =
+        "sheets.data.rowData.values(" +
+        "formattedValue," +
+        "hyperlink," +
+        "textFormatRuns(startIndex,format)," +
+        "effectiveFormat(backgroundColorStyle,horizontalAlignment,textFormat)" +
+        ")";
+      const url =
+        `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}` +
+        `?includeGridData=true&ranges=${encodeURIComponent(RANGE)}` +
+        `&fields=${encodeURIComponent(FIELDS)}&key=${API_KEY}`;
+
+      const res = await fetch(url);
+      const json = await res.json();
+      const rows = json.sheets[0].data[0].rowData ?? [];
+      console.log(rows);
+
+      function toCssColor(colorStyle) {
+        const c = colorStyle?.rgbColor;
+        if (!c) return null;
+        const r = Math.round((c.red ?? 0) * 255);
+        const g = Math.round((c.green ?? 0) * 255);
+        const b = Math.round((c.blue ?? 0) * 255);
+        const a = c.alpha ?? 1;
+        return a === 1 ? `rgb(${r},${g},${b})` : `rgba(${r},${g},${b},${a})`;
+      }
+
+      function applyTextFormat(el, fmt) {
+        if (!fmt) return;
+        if (fmt.bold) el.style.fontWeight = "bold";
+        if (fmt.italic) el.style.fontStyle = "italic";
+        if (fmt.strikethrough || fmt.underline) {
+          const parts = [];
+          if (fmt.underline) parts.push("underline");
+          if (fmt.strikethrough) parts.push("line-through");
+          el.style.textDecoration = parts.join(" ");
+        }
+        if (fmt.fontFamily) el.style.fontFamily = fmt.fontFamily;
+        if (fmt.fontSize) el.style.fontSize = `${fmt.fontSize}px`;
+        const color = toCssColor(fmt.foregroundColorStyle);
+        if (color) el.style.color = color;
+      }Œ
+
+      function setTextWithBreaks(el, str) {
+        const parts = str.split("\n");
+        for (let i = 0; i < parts.length; i++) {
+          if (i > 0) el.appendChild(document.createElement("br"));
+          el.appendChild(document.createTextNode(parts[i]));
         }
       }
 
-      loadSheet();
+      function cellToDom(cell) {
+        const text = (cell.formattedValue ?? "");
+        if (!text) return document.createTextNode("");
+
+        const runs = cell.textFormatRuns;
+        const defaultFmt = cell.effectiveFormat?.textFormat;
+        const wrap = cell.hyperlink
+          ? () => {
+              const a = document.createElement("a");
+              a.href = cell.hyperlink;
+              a.target = "_blank";
+              a.rel = "noopener";
+              return a;
+            }
+          : () => document.createDocumentFragment();
+
+        // No rich-text runs → single span with the cell-level format
+        if (!runs || runs.length === 0) {
+          const container = wrap();
+          const span = document.createElement("span");
+          applyTextFormat(span, defaultFmt);
+          setTextWithBreaks(span, text);
+          container.appendChild(span);
+          return container;
+        }
+
+        // Rich-text runs
+        const container = wrap();
+        for (let i = 0; i < runs.length; i++) {
+          const start = runs[i].startIndex ?? 0;
+          const end =
+            i + 1 < runs.length
+              ? (runs[i + 1].startIndex ?? text.length)
+              : text.length;
+          const span = document.createElement("span");
+          // Merge default format with run-specific overrides
+          const merged = { ...defaultFmt, ...runs[i].format };
+          applyTextFormat(span, merged);
+          setTextWithBreaks(span, text.slice(start, end));
+          container.appendChild(span);
+        }
+        return container;
+      }
+
+      function renderTable(rows) {
+        const table = document.createElement("table");
+        for (const row of rows) {
+          const tr = document.createElement("tr");
+          for (const cell of row.values ?? []) {
+            const td = document.createElement("td");
+            const bg = toCssColor(cell?.effectiveFormat?.backgroundColorStyle);
+            if (bg) td.style.backgroundColor = bg;
+            const align = cell?.effectiveFormat?.horizontalAlignment;
+            if (align) td.style.textAlign = align.toLowerCase();
+            td.appendChild(cellToDom(cell ?? {}));
+            tr.appendChild(td);
+          }
+          table.appendChild(tr);
+        }
+        return table;
+      }
+      document.body.appendChild(renderTable(rows));
     </script>
   </body>
 </html>
