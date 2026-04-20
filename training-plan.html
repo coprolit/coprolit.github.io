@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Training Plan - Coach Dreyer</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>Training Plan</h1>
+
+    <div id="sheet-data">Loading...</div>
+
+    <script type="module">
+      import { fetchSheetRows, renderTable } from "./sheetsLoader.js";
+
+      const SHEET_ID = "1JsawymKJADyuKcigW80DVj__yFAwQFpWKCALTXBo0gE";
+      const API_KEY = "AIzaSyCw0zGv14vKpt2GjPrXzR7u6hUqZV6JV_4";
+      const RANGE = "drills!A1:Z100";
+      const FIELDS =
+        "sheets.data.rowData.values(" +
+        "formattedValue," +
+        "hyperlink," +
+        "textFormatRuns(startIndex,format)," +
+        "effectiveFormat(backgroundColorStyle,horizontalAlignment,textFormat)" +
+        ")";
+
+      // Parse IDs from URL parameters (e.g. ?ids=U9_A1+U9_B4+U9_B1)
+      const params = new URLSearchParams(window.location.search);
+      const idsParam = params.get("ids") ?? "";
+      const ids = idsParam.split(" ").filter(Boolean);
+
+      const sheetDataDiv = document.getElementById("sheet-data");
+
+      if (ids.length === 0) {
+        sheetDataDiv.textContent = "No training plan IDs specified.";
+      } else {
+        const rows = await fetchSheetRows({
+          sheetId: SHEET_ID,
+          apiKey: API_KEY,
+          range: RANGE,
+          fields: FIELDS,
+        });
+
+        // Build a lookup map from the first cell value to the row
+        const rowMap = new Map();
+        for (const row of rows) {
+          const firstCell = row.values?.[0]?.formattedValue ?? "";
+          if (!rowMap.has(firstCell)) rowMap.set(firstCell, row);
+        }
+
+        // Collect rows in the order specified by the URL parameters
+        const filtered = [];
+        for (const id of ids) {
+          const row = rowMap.get(id);
+          if (row) filtered.push(row);
+        }
+
+        if (filtered.length === 0) {
+          sheetDataDiv.textContent = "No matching rows found.";
+        } else {
+          const table = renderTable(filtered);
+          sheetDataDiv.innerHTML = "";
+          sheetDataDiv.appendChild(table);
+        }
+      }
+    </script>
+  </body>
+</html>
